@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-enum Type{HYBRID, TRUCK;}
+enum Type{UAVELIGBLE, TRUCK;}
 public class Node {
 	private Type type;
 	private int index;
