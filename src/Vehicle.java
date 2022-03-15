@@ -1,4 +1,14 @@
 
 public class Vehicle {
-	public int Capacity;
+	private int Capacity;
+	
+	public Vehicle(int Capacity) {
+		this.Capacity = Capacity;
+	}
+
+	public int getCapacity() {
+		return Capacity;
+	}
+	
+	
 }
