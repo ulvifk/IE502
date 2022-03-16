@@ -31,7 +31,7 @@ public class Variables {
 	private Network network;
 	private GRBModel model;
 	
-	public Variables(Network network, GRBModel model) {
+	public Variables(Network network, GRBModel model) throws GRBException {
 		this.x = new HashMap();
 		this.p = new HashMap();
 		this.y = new HashMap();
@@ -50,6 +50,24 @@ public class Variables {
 		this.zFirstRetrievalSecondLaunch = new HashMap();
 		this.network = network;
 		this.model = model;
+		
+		populateX();
+		populateP();
+		populateY();
+		populateTruckArrival();
+		populateTruckService();
+		populateTruckCompletion();
+		populateDroneArrival();
+		populateDroneCompletion();
+		populateTwoDroneRetrieval();
+		populateDroneRetrievedSecond();
+		populateDroneRetrievedFirst();
+		populateTwoDroneLaunch();
+		populateDroneLaunchedSecond();
+		populateDroneLaunchedFirst();
+		populateFirstLaunchSecondRetrieval();
+		populateFirstRetrievalSecondLaunch();
+		populateU();
 	}
 	
 	private void populateX() throws GRBException {
@@ -68,10 +86,171 @@ public class Variables {
 			this.p.put(i, new HashMap<Node, GRBVar>());
 			for(Node j : this.network.getC()) {
 				if(i == j) continue;
-				GRBVar pij = this.model.addVar(0, 1, 0, GRB.BINARY, "p_ij");
+				GRBVar pij = this.model.addVar(0, 1, 0, GRB.BINARY, "p_" +i.getIndex() + j.getIndex());
 				this.p.get(i).put(j, pij);
 			}
 		}
 	}
 	
+	// Note: It is assumed that every sortie is viable.
+	private void populateY() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			this.y.put(v, new HashMap());
+			for(Node i : this.network.getN0()) {
+				this.y.get(v).put(i, new HashMap());
+				for(Node j : this.network.getCDrone().get(v)) {
+					if(i == j) continue;
+					this.y.get(v).get(i).put(j, new HashMap());
+					for(Node k : this.network.getNPlus()) {
+						GRBVar y = this.model.addVar(0, 1, 0, GRB.BINARY, "y_" + v.getIndex() + i.getIndex() + j.getIndex() + k.getIndex());
+						this.y.get(v).get(i).get(j).put(k, y);
+					}
+				}
+			}
+		}
+	}
+	
+	private void populateTruckArrival() throws GRBException {
+		for(Node i : this.network.getN()) {
+			GRBVar t = this.model.addVar(0, GRB.INFINITY, 0, GRB.CONTINUOUS, "TruckArrival_" + i.getIndex());
+			this.truckArrival.put(i, t);
+		}
+	}
+	
+	private void populateTruckService() throws GRBException {
+		for(Node i : this.network.getNPlus()) {
+			GRBVar t = this.model.addVar(0, GRB.INFINITY, 0, GRB.CONTINUOUS, "TruckService_" + i.getIndex());
+			this.truckService.put(i, t);
+		}
+	}
+	
+	private void populateTruckCompletion() throws GRBException {
+		for(Node i : this.network.getN()) {
+			GRBVar t = this.model.addVar(0, GRB.INFINITY, 0, GRB.CONTINUOUS, "TruckCompletion_" + i.getIndex());
+			this.truckCompletion.put(i, t);
+		}
+	}
+	
+	private void populateDroneArrival() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			this.droneArrival.put(v, new HashMap());
+			for(Node i : this.network.getN()) {
+				GRBVar t = this.model.addVar(0, GRB.INFINITY, 0, GRB.CONTINUOUS, "DroneArrival_" + v.getIndex() + i.getIndex());
+				this.droneArrival.get(v).put(i, t);
+			}
+		}
+	}
+	
+	private void populateDroneCompletion() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			this.droneCompletion.put(v, new HashMap());
+			for(Node i : this.network.getN()) {
+				GRBVar t = this.model.addVar(0, GRB.INFINITY, 0, GRB.CONTINUOUS, "DroneCompletion_" + v.getIndex() + i.getIndex());
+				this.droneCompletion.get(v).put(i, t);
+			}
+		}
+	}
+	
+	private void populateTwoDroneRetrieval() throws GRBException {
+		for(Drone v1 : this.network.getV()) {
+			this.zTwoDroneRetrieval.put(v1, new HashMap());
+			for(Drone v2 : this.network.getV()) {
+				if (v1 == v2) continue;
+				this.zTwoDroneRetrieval.get(v1).put(v2, new HashMap());
+				for(Node k : this.network.getNPlus()) {
+					GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "TwoDroneRetrieval_" + v1.getIndex() + v2.getIndex() + k.getIndex());
+					this.zTwoDroneRetrieval.get(v1).get(v2).put(k, z);
+				}
+			}
+		}
+	}
+	
+	private void populateDroneRetrievedSecond() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			this.zDroneRetrievedSecond.put(v, new HashMap());
+			for(Node k : this.network.getNPlus()) {
+				GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "DroneRetrievedSecond" + v.getIndex() + k.getIndex());
+				this.zDroneRetrievedSecond.get(v).put(k, z);
+			}
+		}
+	}
+	
+	private void populateDroneRetrievedFirst() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			this.zDroneRetrievedFirst.put(v, new HashMap());
+			for(Node k : this.network.getNPlus()) {
+				GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "DroneRetrievedFirst" + v.getIndex() + k.getIndex());
+				this.zDroneRetrievedFirst.get(v).put(k, z);
+			}
+		}
+	}
+	
+	private void populateTwoDroneLaunch() throws GRBException {
+		for(Drone v1 : this.network.getV()) {
+			this.zTwoDroneLaunch.put(v1, new HashMap());
+			for(Drone v2 : this.network.getV()) {
+				if (v1 == v2) continue;
+				this.zTwoDroneLaunch.get(v1).put(v2, new HashMap());
+				for(Node k : this.network.getN0()) {
+					GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "TwoDroneLaunch_" + v1.getIndex() + v2.getIndex() + k.getIndex());
+					this.zTwoDroneLaunch.get(v1).get(v2).put(k, z);
+				}
+			}
+		}
+	}
+	
+	private void populateDroneLaunchedSecond() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			this.zDroneLaunchedSecond.put(v, new HashMap());
+			for(Node k : this.network.getN0()) {
+				GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "DroneLaunchedSecond" + v.getIndex() + k.getIndex());
+				this.zDroneLaunchedSecond.get(v).put(k, z);
+			}
+		}
+	}
+	
+	private void populateDroneLaunchedFirst() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			this.zDroneLaunchedFirst.put(v, new HashMap());
+			for(Node k : this.network.getN0()) {
+				GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "DroneLaunchedFirst" + v.getIndex() + k.getIndex());
+				this.zDroneLaunchedFirst.get(v).put(k, z);
+			}
+		}
+	}
+	
+	private void populateFirstLaunchSecondRetrieval() throws GRBException {
+		for(Drone v1 : this.network.getV()) {
+			this.zFirstLaunchSecondRetrieval.put(v1, new HashMap());
+			for(Drone v2 : this.network.getV()) {
+				if(v1 == v2) continue;
+				this.zFirstLaunchSecondRetrieval.get(v1).put(v2, new HashMap());
+				for(Node i : this.network.getC()) {
+					GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "FirstLaunchSecondRetrieval" +v1.getIndex() + v2.getIndex() + i.getIndex());
+					this.zFirstLaunchSecondRetrieval.get(v1).get(v2).put(i, null);
+				}
+			}
+		}
+	}
+	
+	private void populateFirstRetrievalSecondLaunch() throws GRBException {
+		for(Drone v1 : this.network.getV()) {
+			this.zFirstRetrievalSecondLaunch.put(v1, new HashMap());
+			for(Drone v2 : this.network.getV()) {
+				if(v1 == v2) continue;
+				this.zFirstRetrievalSecondLaunch.get(v1).put(v2, new HashMap());
+				for(Node i : this.network.getC()) {
+					GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "FirstRetrievalSecondLaunch" +v1.getIndex() + v2.getIndex() + i.getIndex());
+					this.zFirstRetrievalSecondLaunch.get(v1).get(v2).put(i, null);
+				}
+			}
+		}
+	}
+	
+	private void populateU() throws GRBException {
+		for(Node i : this.network.getNPlus()) {
+			GRBVar u = this.model.addVar(1, this.network.getC().size() + 2, 0, GRB.CONTINUOUS, "u_" + i.getIndex());
+			this.u.put(i, u);
+		}
+	}
 }

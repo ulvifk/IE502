@@ -2,12 +2,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
+
+import javax.print.attribute.HashAttributeSet;
 
 public class Network {
 	private ArrayList<Node> C;
 	private ArrayList<Drone> V;
-	private ArrayList<Node> CDrone;
+	private HashMap<Drone, ArrayList<Node>> CDrone;
 	private ArrayList<Node> N;
 	private ArrayList<Node> NPlus;
 	private ArrayList<Node> N0;
@@ -17,7 +20,10 @@ public class Network {
 	public Network(int droneLimit) throws FileNotFoundException {
 		this.C = new ArrayList<>();
 		this.V = new ArrayList<>();
-		this.CDrone = new ArrayList<>();
+		this.CDrone = new HashMap();
+		for(Drone v : this.V) {
+			this.CDrone.put(v, new ArrayList<Node>());
+		}
 		this.N = new ArrayList();
 		this.NPlus = new ArrayList();
 		this.N0 = new ArrayList();
@@ -37,7 +43,7 @@ public class Network {
 	
 	private void populateDrones(int droneLimit) {
 		for(int i = 0; i<droneLimit; i++) {
-			Drone drone = new Drone();
+			Drone drone = new Drone(i);
 			this.V.add(drone);
 		}
 	}
@@ -57,7 +63,9 @@ public class Network {
 			Position position = new Position(random.nextDouble()* range, random.nextDouble() * range);
 			Node node  = new Node(Type.UAVELIGBLE, i, position, random.nextInt(parcelRange) + 1);
 			this.C.add(node);
-			this.CDrone.add(node);
+			for(Drone v : this.V) {
+				this.CDrone.get(v).add(node);
+			}
 			this.N.add(node);
 			this.NPlus.add(node);
 			this.N0.add(node);
@@ -92,7 +100,7 @@ public class Network {
 		return V;
 	}
 
-	public ArrayList<Node> getCDrone() {
+	public HashMap<Drone, ArrayList<Node>> getCDrone() {
 		return CDrone;
 	}
 
