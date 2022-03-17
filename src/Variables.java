@@ -102,6 +102,7 @@ public class Variables {
 					if(i == j) continue;
 					this.y.get(v).get(i).put(j, new HashMap());
 					for(Node k : this.network.getNPlus()) {
+						if(i == k)continue;
 						GRBVar y = this.model.addVar(0, 1, 0, GRB.BINARY, "y_" + v.getIndex() + i.getIndex() + j.getIndex() + k.getIndex());
 						this.y.get(v).get(i).get(j).put(k, y);
 					}
@@ -253,4 +254,75 @@ public class Variables {
 			this.u.put(i, u);
 		}
 	}
+
+	
+	public HashMap<Node, HashMap<Node, GRBVar>> getX() {
+		return x;
+	}
+
+	public HashMap<Node, HashMap<Node, GRBVar>> getP() {
+		return p;
+	}
+
+	public HashMap<Drone, HashMap<Node, HashMap<Node, HashMap<Node, GRBVar>>>> getY() {
+		return y;
+	}
+
+	public HashMap<Node, GRBVar> getTruckArrival() {
+		return truckArrival;
+	}
+
+	public HashMap<Node, GRBVar> getTruckService() {
+		return truckService;
+	}
+
+	public HashMap<Node, GRBVar> getTruckCompletion() {
+		return truckCompletion;
+	}
+
+	public HashMap<Drone, HashMap<Node, GRBVar>> getDroneArrival() {
+		return droneArrival;
+	}
+
+	public HashMap<Drone, HashMap<Node, GRBVar>> getDroneCompletion() {
+		return droneCompletion;
+	}
+
+	public HashMap<Drone, HashMap<Drone, HashMap<Node, GRBVar>>> getzTwoDroneRetrieval() {
+		return zTwoDroneRetrieval;
+	}
+
+	public HashMap<Drone, HashMap<Node, GRBVar>> getzDroneRetrievedSecond() {
+		return zDroneRetrievedSecond;
+	}
+
+	public HashMap<Drone, HashMap<Node, GRBVar>> getzDroneRetrievedFirst() {
+		return zDroneRetrievedFirst;
+	}
+
+	public HashMap<Drone, HashMap<Drone, HashMap<Node, GRBVar>>> getzTwoDroneLaunch() {
+		return zTwoDroneLaunch;
+	}
+
+	public HashMap<Drone, HashMap<Node, GRBVar>> getzDroneLaunchedSecond() {
+		return zDroneLaunchedSecond;
+	}
+
+	public HashMap<Drone, HashMap<Node, GRBVar>> getzDroneLaunchedFirst() {
+		return zDroneLaunchedFirst;
+	}
+
+	public HashMap<Drone, HashMap<Drone, HashMap<Node, GRBVar>>> getzFirstLaunchSecondRetrieval() {
+		return zFirstLaunchSecondRetrieval;
+	}
+
+	public HashMap<Drone, HashMap<Drone, HashMap<Node, GRBVar>>> getzFirstRetrievalSecondLaunch() {
+		return zFirstRetrievalSecondLaunch;
+	}
+
+	public HashMap<Node, GRBVar> getU() {
+		return u;
+	}
+
+	
 }

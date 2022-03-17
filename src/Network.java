@@ -16,6 +16,8 @@ public class Network {
 	private ArrayList<Node> N0;
 	
 	private Vehicle vehicle;
+	private Node startingDepot;
+	private Node endingDepot;
 	
 	public Network(int droneLimit) throws FileNotFoundException {
 		this.C = new ArrayList<>();
@@ -50,14 +52,17 @@ public class Network {
 	private void randomDataGeneration(int numberOfCustomers, int numberOfDroneNodes, int range, int parcelRange) {
 		Random random = new Random(0);
 		
-		Node departDepot = new Node(Type.TRUCK, 0, new Position(0, 0), 0);
-		Node arrivalDepot = new Node(Type.TRUCK, numberOfCustomers+1, new Position(0, 0), 0);
+		Node startingDepot = new Node(Type.TRUCK, 0, new Position(0, 0), 0);
+		Node endingDepot = new Node(Type.TRUCK, numberOfCustomers+1, new Position(0, 0), 0);
 		
-		this.N.add(departDepot);
-		this.N.add(arrivalDepot);
+		this.startingDepot = startingDepot;
+		this.endingDepot = endingDepot;
 		
-		this.NPlus.add(arrivalDepot);
-		this.N0.add(departDepot);
+		this.N.add(startingDepot);
+		this.N.add(endingDepot);
+		
+		this.NPlus.add(endingDepot);
+		this.N0.add(startingDepot);
 		
 		for(int i = 1; i<numberOfDroneNodes+1; i++) {
 			Position position = new Position(random.nextDouble()* range, random.nextDouble() * range);
@@ -118,6 +123,14 @@ public class Network {
 
 	public Vehicle getVehicle() {
 		return vehicle;
+	}
+
+	public Node getStartingDepot() {
+		return startingDepot;
+	}
+
+	public Node getEndingDepot() {
+		return endingDepot;
 	}
 
 	
