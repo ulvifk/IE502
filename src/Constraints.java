@@ -281,7 +281,7 @@ public class Constraints {
 		}
 	}
 
-	private void constraint15() throws GRBException {
+	private void constraint15() throws GRBException { // prevent overlaping of sorties
 		for(Node i : this.network.getN0()) {
 			for(Node k : this.network.getNPlus()) {
 				if(i == k) continue;
@@ -322,6 +322,334 @@ public class Constraints {
 						rhs.multAdd(-this.M, sum2);
 						
 						this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint15");
+					}
+				}
+			}
+		}
+	}
+
+	private void constraint16() throws GRBException { // if drone arrives later than service time of the truck.
+		for(Drone v : this.network.getV()) {
+			for(Node i : this.network.getN0()) {
+				GRBLinExpr lhs = new GRBLinExpr();
+				lhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(i));
+				
+				GRBLinExpr rhs = new GRBLinExpr();
+				GRBLinExpr expr = new GRBLinExpr();
+				expr.addConstant(1);
+				for(Node j : this.network.getC()) {
+					if(j == i )continue;
+					for(Node k : this.network.getNPlus()) {
+						if(!isSortie(i, j, k)) continue;
+						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
+					}
+				}
+				
+				rhs.addTerm(1, this.variables.getDroneArrival().get(v).get(i));
+				rhs.addConstant(i.getDroneLaunchTime(v));
+				rhs.multAdd(-M, expr);
+				
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint16");
+			}
+		}
+	}
+
+	private void constraint17() throws GRBException { // If drone launched before truck serves
+		for(Drone v : this.network.getV()) {
+			for(Node i : this.network.getN0()) {
+				GRBLinExpr lhs = new GRBLinExpr();
+				lhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(i));
+				
+				GRBLinExpr rhs = new GRBLinExpr();
+				rhs.addTerm(1, this.variables.getTruckArrival().get(i));
+				rhs.addConstant(i.getDroneLaunchTime(v));
+				rhs.addConstant(-M);
+				rhs.addTerm(M, this.variables.getzDroneLaunchedFirst().get(v).get(i));
+				
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint17");
+			}
+		}
+	}
+
+	private void constraint18() throws GRBException { // Drone launched after truck serves.
+		for(Drone v : this.network.getV()) {
+			for(Node i : this.network.getN0()) {
+				GRBLinExpr lhs = new GRBLinExpr();
+				lhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(i));
+				
+				GRBLinExpr rhs = new GRBLinExpr();
+				rhs.addTerm(1, this.variables.getTruckService().get(i));
+				rhs.addConstant(i.getDroneLaunchTime(v));
+				rhs.addConstant(-M);
+				rhs.addTerm(M, this.variables.getzDroneLaunchedSecond().get(v).get(i));
+				
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint17");
+			}
+		}
+	}
+	
+	private void constraint19() throws GRBException { // Case two drone launch
+		for(Drone v : this.network.getV()) {
+			for(Drone v2 : this.network.getV()) {
+				if(v == v2) continue;
+				for(Node i : this.network.getN0()) {
+					GRBLinExpr lhs = new GRBLinExpr();
+					lhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(i));
+					
+					GRBLinExpr rhs = new GRBLinExpr();
+					rhs.addTerm(1, this.variables.getDroneCompletion().get(v2).get(i));
+					rhs.addConstant(i.getDroneLaunchTime(v));
+					rhs.addConstant(-M);
+					rhs.addTerm(M, this.variables.getzTwoDroneLaunch().get(v2).get(v).get(i));
+					
+					this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint 19");
+				}
+			}
+		}
+	}
+
+	private void constraint20() throws GRBException { // First drone retrieved then second drone launched
+		for(Drone v : this.network.getV()) {
+			for(Drone v2 : this.network.getV()) {
+				if(v == v2) continue;
+				for(Node i : this.network.getC()) {
+					GRBLinExpr lhs = new GRBLinExpr();
+					lhs.addTerm(1, this.variables.getDroneCompletion().get(v2).get(i));
+					
+					GRBLinExpr rhs = new GRBLinExpr();
+					rhs.addTerm(1, this.variables.getDroneArrival().get(v).get(i));
+					rhs.addConstant(i.getDroneLaunchTime(v2));
+					rhs.addConstant(-M);
+					rhs.addTerm(M, this.variables.getzFirstRetrievalSecondLaunch().get(v).get(v2).get(i));
+					
+					this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint20");
+				}
+			}
+		}
+		
+	}
+	
+	private void constraint21() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			for(Node j : this.network.getC()) {
+				for(Node i : this.network.getN0()) {
+					if(i == j) continue;
+					GRBLinExpr lhs = new GRBLinExpr();
+					lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(j));
+					
+					GRBLinExpr rhs = new GRBLinExpr();
+					GRBLinExpr expr = new GRBLinExpr();
+					expr.addConstant(1);
+					for(Node k : this.network.getNPlus()) {
+						if(!isSortie(i, j, k)) continue;
+						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
+					}
+					
+					rhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(i));
+					rhs.addConstant(i.getDroneDistanceTo(j, v));
+					rhs.multAdd(-M, expr);
+					
+					this.model.addConstr(lhs, GRB.GREATER_EQUAL, expr, "Constraint21");
+				}
+			}
+		}
+	}
+	
+	private void constraint22() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			for(Node j : this.network.getC()) {
+				for(Node i : this.network.getN0()) {
+					if(i == j) continue;
+					GRBLinExpr lhs = new GRBLinExpr();
+					lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(j));
+					
+					GRBLinExpr rhs = new GRBLinExpr();
+					GRBLinExpr expr = new GRBLinExpr();
+					expr.addConstant(1);
+					for(Node k : this.network.getNPlus()) {
+						if(!isSortie(i, j, k)) continue;
+						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
+					}
+					
+					rhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(i));
+					rhs.addConstant(i.getDroneDistanceTo(j, v));
+					rhs.multAdd(+M, expr);
+					
+					this.model.addConstr(lhs, GRB.LESS_EQUAL, expr, "Constraint22");
+				}
+			}
+		}
+	}
+
+	private void constraint23() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			for(Node j : this.network.getC()) {
+				GRBLinExpr lhs = new GRBLinExpr();
+				lhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(j));
+				
+				GRBLinExpr rhs = new GRBLinExpr();
+				GRBLinExpr expr = new GRBLinExpr();
+				for(Node i : this.network.getN0()) {
+					if(i == j) continue;
+					for(Node k : this.network.getNPlus()) {
+						if(!isSortie(i, j, k)) continue;
+						expr.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
+					}
+				}
+				
+				rhs.addTerm(1, this.variables.getDroneArrival().get(v).get(j));
+				rhs.multAdd(j.getDroveServiceTime(v), expr);
+				
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint23");
+			}
+		}
+	}
+	
+	private void constraint24() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			for(Node j : this.network.getC()) {
+				GRBLinExpr lhs = new GRBLinExpr();
+				lhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(j));
+				
+				GRBLinExpr rhs = new GRBLinExpr();
+				GRBLinExpr expr = new GRBLinExpr();
+				expr.addConstant(1);
+				for(Node i : this.network.getN0()) {
+					if(i == j) continue;
+					for(Node k : this.network.getNPlus()) {
+						if(!isSortie(i, j, k)) continue;
+						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
+					}
+				}
+				
+				rhs.addTerm(1, this.variables.getDroneArrival().get(v).get(j));
+				rhs.addConstant(j.getDroveServiceTime(v));
+				rhs.multAdd(M, expr);
+				
+				this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint24");
+			}
+		}
+	}
+
+	private void constraint25() throws GRBException { // Drone retrieval, if drone arrives first.
+		for(Drone v : this.network.getV()) {
+			for(Node k : this.network.getNPlus()) {
+				GRBLinExpr lhs = new GRBLinExpr();
+				lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
+				
+				GRBLinExpr rhs = new GRBLinExpr();
+				rhs.addTerm(1, this.variables.getTruckArrival().get(k));
+				rhs.addConstant(k.getDroneRetrievalTime(v));
+				rhs.addConstant(-M);
+				rhs.addTerm(M, this.variables.getzDroneRetrievedFirst().get(v).get(k));
+				
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint25");
+			}
+		}
+	}
+	
+	private void constraint26() throws GRBException { // Drone retrieval, if truck arrives first
+		for(Drone v : this.network.getV()) {
+			for(Node k : this.network.getNPlus()) {
+				GRBLinExpr lhs = new GRBLinExpr();
+				lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
+				
+				GRBLinExpr rhs = new GRBLinExpr();
+				rhs.addTerm(1, this.variables.getTruckService().get(k));
+				rhs.addConstant(k.getDroneRetrievalTime(v));
+				rhs.addConstant(-M);
+				rhs.addTerm(M, this.variables.getzDroneRetrievedSecond().get(v).get(k));
+				
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint26");
+			}
+		}
+	}
+	
+	private void constraint27() throws GRBException { // 2 Drone retrieval
+		for(Drone v : this.network.getV()) {
+			for(Drone v2 : this.network.getV()) {
+				if(v == v2) continue;
+				for(Node k : this.network.getNPlus()) {
+					GRBLinExpr lhs = new GRBLinExpr();
+					lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
+					
+					GRBLinExpr rhs = new GRBLinExpr();
+					rhs.addTerm(1, this.variables.getDroneArrival().get(v2).get(k));
+					rhs.addConstant(k.getDroneRetrievalTime(v2));
+					rhs.addConstant(-M);
+					rhs.addTerm(M, this.variables.getzTwoDroneRetrieval().get(v2).get(v).get(k));
+					
+					this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint27");
+				}
+			}
+		}
+	}
+
+	private void constraint28() throws GRBException { // 2 drone first launch then retrieval
+		for(Drone v : this.network.getV()) {
+			for(Drone v2 : this.network.getV()) {
+				if(v == v2) continue;
+				for(Node k : this.network.getC()) {
+					GRBLinExpr lhs = new GRBLinExpr();
+					lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
+					
+					GRBLinExpr rhs = new GRBLinExpr();
+					rhs.addTerm(1, this.variables.getDroneArrival().get(v2).get(k));
+					rhs.addConstant(k.getDroneRetrievalTime(v2));
+					rhs.addConstant(-M);
+					rhs.addTerm(M, this.variables.getzFirstLaunchSecondRetrieval().get(v2).get(v).get(k));
+					
+					this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint27");
+				}
+			}
+		}
+	}
+
+	private void constraint29() throws GRBException { // if drone arrives later than service time of truck
+		for(Drone v : this.network.getV()) {
+			for(Node k : this.network.getNPlus()) {
+				for(Node j : this.network.getC()) {
+					if(k == j) continue;
+					GRBLinExpr lhs = new GRBLinExpr();
+					lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
+					
+					GRBLinExpr rhs = new GRBLinExpr();
+					GRBLinExpr expr = new GRBLinExpr();
+					expr.addConstant(1);
+					for(Node i : this.network.getN0()) {
+						if(!isSortie(i, j, k)) continue;
+						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
+					}
+					rhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(j));
+					rhs.addConstant(j.getDroneDistanceTo(j, v));
+					rhs.addConstant(k.getDroneRetrievalTime(v));
+					rhs.multAdd(-M, expr);
+					
+					this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint29");
+				}
+			}
+		}
+	}
+
+	private void constraint30() throws GRBException { // Endurance
+		for(Drone v : this.network.getV()) {
+			for(Node i : this.network.getN0()) {
+				for(Node j : this.network.getCDrone().get(v)) {
+					if(i == j) continue;
+					for(Node k : this.network.getNPlus()) {
+						if(!isSortie(i, j, k)) continue;
+						GRBLinExpr lhs = new GRBLinExpr();
+						lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
+						lhs.addConstant(-k.getDroneRetrievalTime(v));
+						lhs.addTerm(-1, this.variables.getDroneCompletion().get(v).get(i));
+						
+						GRBLinExpr rhs = new GRBLinExpr();
+						rhs.addConstant(v.getEndurance());
+						rhs.addConstant(M);
+						rhs.addTerm(-M, this.variables.getY().get(v).get(i).get(j).get(k));
+						
+						this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint30");
+						
 					}
 				}
 			}

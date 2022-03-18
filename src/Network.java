@@ -30,6 +30,7 @@ public class Network {
 		this.NPlus = new ArrayList();
 		this.N0 = new ArrayList();
 		this.vehicle = new Vehicle(sumParcelWeight());
+		
 		randomDataGeneration(10, 4, 10, 10);
 		writeNetworkToCsv();
 	}

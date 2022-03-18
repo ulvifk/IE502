@@ -11,6 +11,7 @@ public class Node {
 	private ArrayList<Node> inComingArcs;
 	private HashMap<Drone, Double> launchTime;
 	private HashMap<Drone, Double> retrievalTime;
+	private HashMap<Drone, Double> serviceTime;
 	
 	public Node(Type type, int index, Position position, int parcelWeight) {
 		this.type = type;
@@ -59,6 +60,23 @@ public class Node {
 	
 	public void setDroneRetrievalTime(Drone drone, double time) {
 		this.retrievalTime.put(drone, time);
+	}	
+	
+	public double getDroneDistanceTo(Node j, Drone v) {
+		return this.position.droneDistanceTo(j.getPosition(), v.getDroneFactor());
 	}
+	
+	public double getTruckDistanceTo(Node j) {
+		return this.position.truckDistanceTo(j.getPosition());
+	}
+
+	public void addDroneServiceTime(Drone v, double time) {
+		this.serviceTime.put(v, time);
+	}
+	
+	public double getDroveServiceTime(Drone v) {
+		return this.serviceTime.get(v);
+	}
+	
 	
 }

@@ -8,16 +8,18 @@ public class Position {
 		this.y = y;
 	}
 	
-	public double droneDistance (Position pos, double droneFactor) {
+	public double droneDistanceTo (Position pos, double droneFactor) {
 		return distanceTo(pos) * droneFactor;
 	}
 	
-	public double truckDistance (Position pos) {
+	public double truckDistanceTo (Position pos) {
 		return distanceTo(pos);
 	}
 	
 	private double distanceTo(Position pos) {
-		return 0;
+		double distance = Math.sqrt(Math.pow(this.x - pos.getX(), 2) + Math.pow(this.y - pos.getY(), 2));
+		
+		return distance;
 	}
 
 	public double getX() {
