@@ -19,6 +19,11 @@ public class Network {
 	private Node startingDepot;
 	private Node endingDepot;
 	
+	private double fixedTruckServiceTime = 1;
+	private double fixedDroneLaunchTime = 1;
+	private double fixedDroneRetrievalTime = 1;
+	private double fixedDroneServiceTime = 1;
+	
 	public Network(int droneLimit) throws FileNotFoundException {
 		this.C = new ArrayList<>();
 		this.V = new ArrayList<>();
@@ -31,8 +36,8 @@ public class Network {
 		this.N0 = new ArrayList();
 		this.vehicle = new Vehicle(sumParcelWeight());
 		
-		randomDataGeneration(10, 4, 10, 10);
-		writeNetworkToCsv();
+		randomDataPointGeneration(10, 4, 10, 10);
+		writePositionsToCsv();
 	}
 	
 	private int sumParcelWeight() {
@@ -44,13 +49,27 @@ public class Network {
 		return sum;
 	}
 	
+	private void randomServiceTimeGeneration() {
+		for(Node i : this.C) {
+			i.setTruckServiceTime(this.fixedTruckServiceTime);
+		}
+		
+		for(Drone v : this.V) {
+			for(Node i : this.CDrone.get(v)) {
+				i.setDroneLaunchTime(v, this.fixedDroneLaunchTime);
+				i.setDroneRetrievalTime(v, this.fixedDroneRetrievalTime);
+				i.setDroneServiceTime(v, this.fixedDroneServiceTime);
+			}
+		}
+	}
+	
 	private void populateDrones(int droneLimit) {
 		for(int i = 0; i<droneLimit; i++) {
-			Drone drone = new Drone(i);
+			Drone drone = new Drone(i, 0.5, 70);
 			this.V.add(drone);
 		}
 	}
-	private void randomDataGeneration(int numberOfCustomers, int numberOfDroneNodes, int range, int parcelRange) {
+	private void randomDataPointGeneration(int numberOfCustomers, int numberOfDroneNodes, int range, int parcelRange) {
 		Random random = new Random(0);
 		
 		Node startingDepot = new Node(Type.TRUCK, 0, new Position(0, 0), 0);
@@ -86,7 +105,7 @@ public class Network {
 			this.N0.add(node);
 		}	
 	}
-	private void writeNetworkToCsv() throws FileNotFoundException {
+	private void writePositionsToCsv() throws FileNotFoundException {
 		File file = new File("network.csv");
 		PrintWriter out = new PrintWriter(file);
 		

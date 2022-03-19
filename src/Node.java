@@ -7,11 +7,13 @@ public class Node {
 	private int index;
 	private Position position;
 	private int parcelWeight;
+	
 	private ArrayList<Node> outGoingArcs;
 	private ArrayList<Node> inComingArcs;
 	private HashMap<Drone, Double> launchTime;
 	private HashMap<Drone, Double> retrievalTime;
-	private HashMap<Drone, Double> serviceTime;
+	private HashMap<Drone, Double> droneServiceTime;
+	private double truckServiceTime;
 	
 	public Node(Type type, int index, Position position, int parcelWeight) {
 		this.type = type;
@@ -71,11 +73,23 @@ public class Node {
 	}
 
 	public void addDroneServiceTime(Drone v, double time) {
-		this.serviceTime.put(v, time);
+		this.droneServiceTime.put(v, time);
 	}
 	
-	public double getDroveServiceTime(Drone v) {
-		return this.serviceTime.get(v);
+	public double getDroneServiceTime(Drone v) {
+		return this.droneServiceTime.get(v);
+	}
+	
+	public void setDroneServiceTime(Drone v, double time) {
+		this.droneServiceTime.put(v, time);
+	}
+
+	public double getTruckServiceTime() {
+		return truckServiceTime;
+	}
+
+	public void setTruckServiceTime(double truckServiceTime) {
+		this.truckServiceTime = truckServiceTime;
 	}
 	
 	
