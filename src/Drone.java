@@ -8,7 +8,7 @@ public class Drone {
 	public Drone(int index) {
 		this.index = index;
 		this.droneFactor = 0.5;
-		this.endurance = 100;
+		this.endurance = 1000000;
 	}
 	public Drone(int index, double droneFactor, double endurance) {
 		this.index = index;

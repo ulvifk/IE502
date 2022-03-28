@@ -1,35 +1,30 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-enum Type{UAVELIGBLE, TRUCK;}
+enum Type{UAVELIGIBLE, TRUCK;}
 public class Node {
 	private Type type;
 	private int index;
 	private Position position;
-	private int parcelWeight;
+	private double parcelVolume;
 	
-	private ArrayList<Node> outGoingArcs;
-	private ArrayList<Node> inComingArcs;
 	private HashMap<Drone, Double> launchTime;
 	private HashMap<Drone, Double> retrievalTime;
 	private HashMap<Drone, Double> droneServiceTime;
 	private double truckServiceTime;
 	
-	public Node(Type type, int index, Position position, int parcelWeight) {
-		this.type = type;
+	private HashMap<Node, Double> distancesTo;
+	
+	public Node(String type, int index, Position position, double parcelVolume) {
+		if(type.equals("UAVELIGIBLE")) this.type = Type.UAVELIGIBLE;
+		else if(type.equals("TRUCK")) this.type = Type.TRUCK;
 		this.index = index;
 		this.position = position;
-		this.parcelWeight = parcelWeight;
+		this.parcelVolume = parcelVolume;
 		this.launchTime = new HashMap();
 		this.retrievalTime = new HashMap();
-	}
-	
-	public void addOutGoingArc(Node node) {
-		this.outGoingArcs.add(node);
-	}
-	
-	public void addInComingArc(Node node) {
-		this.inComingArcs.add(node);
+		this.droneServiceTime = new HashMap<>();
+		this.distancesTo = new HashMap<>();
 	}
 
 	public Type getType() {
@@ -44,8 +39,8 @@ public class Node {
 		return position;
 	}
 	
-	public int getParcelWeight() {
-		return this.parcelWeight;
+	public double getParcelVolume() {
+		return this.parcelVolume;
 	}
 
 	public double getDroneLaunchTime(Drone drone) {
@@ -65,11 +60,11 @@ public class Node {
 	}	
 	
 	public double getDroneDistanceTo(Node j, Drone v) {
-		return this.position.droneDistanceTo(j.getPosition(), v.getDroneFactor());
+		return this.distancesTo.get(j) * v.getDroneFactor();
 	}
 	
 	public double getTruckDistanceTo(Node j) {
-		return this.position.truckDistanceTo(j.getPosition());
+		return this.distancesTo.get(j);
 	}
 
 	public void addDroneServiceTime(Drone v, double time) {
@@ -90,6 +85,10 @@ public class Node {
 
 	public void setTruckServiceTime(double truckServiceTime) {
 		this.truckServiceTime = truckServiceTime;
+	}
+	
+	public void addDistanceTo(Node node, double distance) {
+		this.distancesTo.put(node, distance);
 	}
 	
 	

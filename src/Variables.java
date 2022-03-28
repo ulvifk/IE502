@@ -35,6 +35,7 @@ public class Variables {
 		this.x = new HashMap();
 		this.p = new HashMap();
 		this.y = new HashMap();
+		this.u = new HashMap<>();
 		this.truckArrival = new HashMap();
 		this.truckService = new HashMap();
 		this.truckCompletion = new HashMap();
@@ -92,6 +93,15 @@ public class Variables {
 		}
 	}
 	
+	private boolean isSortie(Drone v, Node i, Node j, Node k) {
+		if(i == j) return false;
+		if(i == k) return false;
+		if(j == k) return false;
+		if(!this.network.getCDrone().get(v).contains(j)) return false;
+		
+		return true;
+	}
+	
 	// Note: It is assumed that every sortie is viable.
 	private void populateY() throws GRBException {
 		for(Drone v : this.network.getV()) {
@@ -102,7 +112,7 @@ public class Variables {
 					if(i == j) continue;
 					this.y.get(v).get(i).put(j, new HashMap());
 					for(Node k : this.network.getNPlus()) {
-						if(i == k)continue;
+						if(!isSortie(v, i, j, k)) continue;
 						GRBVar y = this.model.addVar(0, 1, 0, GRB.BINARY, "y_" + v.getIndex() + i.getIndex() + j.getIndex() + k.getIndex());
 						this.y.get(v).get(i).get(j).put(k, y);
 					}
@@ -123,6 +133,8 @@ public class Variables {
 			GRBVar t = this.model.addVar(0, GRB.INFINITY, 0, GRB.CONTINUOUS, "TruckService_" + i.getIndex());
 			this.truckService.put(i, t);
 		}
+		
+		this.truckService.put(this.network.getStartingDepot(), this.model.addVar(0, 0, 0, GRB.CONTINUOUS, "TruckService_" + 0));
 	}
 	
 	private void populateTruckCompletion() throws GRBException {
@@ -184,6 +196,10 @@ public class Variables {
 				this.zDroneRetrievedFirst.get(v).put(k, z);
 			}
 		}
+		
+		for(Drone v : this.network.getV()) {
+			this.zDroneRetrievedFirst.get(v).put(this.network.getEndingDepot(), this.model.addVar(0, 0, 0, GRB.CONTINUOUS, "DroneRetrievedFirst" + v.getIndex() + 0));
+		}
 	}
 	
 	private void populateTwoDroneLaunch() throws GRBException {
@@ -228,7 +244,7 @@ public class Variables {
 				this.zFirstLaunchSecondRetrieval.get(v1).put(v2, new HashMap());
 				for(Node i : this.network.getC()) {
 					GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "FirstLaunchSecondRetrieval" +v1.getIndex() + v2.getIndex() + i.getIndex());
-					this.zFirstLaunchSecondRetrieval.get(v1).get(v2).put(i, null);
+					this.zFirstLaunchSecondRetrieval.get(v1).get(v2).put(i, z);
 				}
 			}
 		}
@@ -242,7 +258,7 @@ public class Variables {
 				this.zFirstRetrievalSecondLaunch.get(v1).put(v2, new HashMap());
 				for(Node i : this.network.getC()) {
 					GRBVar z = this.model.addVar(0, 1, 0, GRB.BINARY, "FirstRetrievalSecondLaunch" +v1.getIndex() + v2.getIndex() + i.getIndex());
-					this.zFirstRetrievalSecondLaunch.get(v1).get(v2).put(i, null);
+					this.zFirstRetrievalSecondLaunch.get(v1).get(v2).put(i, z);
 				}
 			}
 		}

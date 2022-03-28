@@ -1,3 +1,5 @@
+import java.util.Locale;
+
 import gurobi.GRB;
 import gurobi.GRBException;
 import gurobi.GRBLinExpr;
@@ -8,22 +10,97 @@ public class Constraints {
 	private GRBModel model;
 	private Network network;
 	private Variables variables;
-	private int M = 100;
+	private int M = 1000000;
 	
-	public Constraints(GRBModel model, Network network, Variables variables) {
+	public Constraints(GRBModel model, Network network, Variables variables) throws GRBException {
 		this.model = model;
 		this.network = network;
 		this.variables = variables;
+		depotP();
+		startingDepotTruckTimes();
+		startingDepotDroneOrderDoesNotMatter();
+		constraint2();
+		constraint3and4();
+		constraint5();
+		constraint6();
+		constraint7();
+		constraint8();
+		constraint9();
+		constraint10();
+		constraint11();
+		constraint12();
+		constraint13();
+		constraint14();
+		constraint15();
+		constraint16();
+		constraint17();
+		constraint18();
+		constraint19();
+		constraint20();
+		constraint21();
+		constraint22();
+		constraint23();
+		constraint24();
+		constraint25();
+		constraint26();
+		constraint27();
+		constraint28();
+		constraint29();
+		constraint30();
+		constraint31();
+		constraint32();
+		constraint33();
+		constraint34();
+		constraint35();
+		constraint36();
+		constraint37();
+		constraint38();
+		constraint39();
+		constraint40();
+		constraint41();
+		constraint42();
+		constraint43();
+		constraint44();
+		constraint45();
+		constraint46();
+		constraint47();
+		constraint48();
+		constraint49();
+		constraint50();
+		constraint51();
+		constraint52();
+		constraint53();
+		constraint54();
+		constraint55();
 	}
-	private boolean isSortie(Node i, Node j, Node k) {
-		if(i != j) {
-			if(i != k) {
-				if(j != k) {
-					return true;
-				}
-			}
+	
+	private boolean isSortie(Drone v, Node i, Node j, Node k) {
+		if(i == j) return false;
+		if(i == k) return false;
+		if(j == k) return false;
+		if(!this.network.getCDrone().get(v).contains(j)) return false;
+		
+		return true;
+	}
+	
+	private void depotP() throws GRBException {
+		for(Node j : this.network.getC()) {
+			GRBLinExpr lhs = new GRBLinExpr();
+			lhs.addTerm(1, this.variables.getP().get(this.network.getStartingDepot()).get(j));
+			
+			this.model.addConstr(lhs, GRB.EQUAL, 1, null);
 		}
-		return false;
+	}
+	
+	private void startingDepotTruckTimes() throws GRBException {
+		this.model.addConstr(this.variables.getTruckArrival().get(this.network.getStartingDepot()), GRB.EQUAL, 0, null);
+		this.model.addConstr(this.variables.getTruckService().get(this.network.getStartingDepot()), GRB.EQUAL, 0, null);	
+	}
+	
+	private void startingDepotDroneOrderDoesNotMatter() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			this.model.addConstr(this.variables.getzDroneRetrievedFirst().get(v).get(this.network.getEndingDepot()), GRB.EQUAL, 0, null);
+		}
 	}
 	
 	private void constraint2() throws GRBException { // Visit each customer exactly once.
@@ -40,7 +117,7 @@ public class Constraints {
 				for(Node i : this.network.getN0()) {
 					if(i == j) continue;
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						GRBVar y = this.variables.getY().get(v).get(i).get(j).get(k);
 						ySum.addTerm(1, y);
 					}
@@ -50,7 +127,7 @@ public class Constraints {
 			GRBLinExpr expr = new GRBLinExpr();
 			expr.add(xSum);
 			expr.add(ySum);
-			this.model.addConstr(expr, GRB.EQUAL, 1, "Constraint2");
+			this.model.addConstr(expr, GRB.EQUAL, 1, "Constraint2_" + j.getIndex());
 		}
 	}
 
@@ -99,7 +176,7 @@ public class Constraints {
 				for(Node j : this.network.getC()) {
 					if(i == j) continue;
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						GRBVar y = this.variables.getY().get(v).get(i).get(j).get(k);
 						lhs.addTerm(1, y);
 					}
@@ -117,7 +194,7 @@ public class Constraints {
 				for(Node i : this.network.getN0()) {
 					if (i == k) continue;
 					for(Node j : this.network.getC()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						GRBVar y = this.variables.getY().get(v).get(i).get(j).get(k);
 						lhs.addTerm(1, y);
 					}
@@ -134,7 +211,7 @@ public class Constraints {
 				for(Node j : this.network.getC()) {
 					if(i == j) continue;
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						GRBLinExpr lhs = new GRBLinExpr();
 						GRBVar y = this.variables.getY().get(v).get(i).get(j).get(k);
 						lhs.addTerm(2, y);
@@ -163,7 +240,7 @@ public class Constraints {
 		for(Drone v : this.network.getV()) {
 			for(Node j : this.network.getC()) {
 				for(Node k : this.network.getNPlus()) {
-					if(!isSortie(this.network.getStartingDepot(), j, k)) continue;
+					if(!isSortie(v, this.network.getStartingDepot(), j, k)) continue;
 					GRBLinExpr lhs = new GRBLinExpr();
 					GRBVar y = this.variables.getY().get(v).get(this.network.getStartingDepot()).get(j).get(k);
 					lhs.addTerm(1, y);
@@ -191,16 +268,15 @@ public class Constraints {
 					lhs.addTerm(-1, this.variables.getU().get(i));
 					
 					GRBLinExpr rhs = new GRBLinExpr();
-					GRBLinExpr sumOverY = new GRBLinExpr();
+					GRBLinExpr expr = new GRBLinExpr();
+					expr.addConstant(1);
 					for(Node j : this.network.getC()) {
-						if(!isSortie(i, j, k)) continue;
-						GRBVar y = this.variables.getY().get(v).get(i).get(j).get(k);
-						sumOverY.addTerm(1, y);
+						if(!isSortie(v, i, j, k)) continue;
+						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 					
-					rhs.addConstant(-1);
-					rhs.addConstant(-this.network.getC().size());
-					rhs.multAdd(this.network.getC().size() + 2, sumOverY);
+					rhs.addConstant(1);
+					rhs.multAdd(-(this.network.getN().size()), expr);
 					
 					this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint10");
 				}
@@ -218,9 +294,10 @@ public class Constraints {
 				lhs.addConstant(1);
 				
 				GRBLinExpr rhs = new GRBLinExpr();
-				rhs.addConstant(this.network.getC().size() + 2);
-				GRBVar x = this.variables.getX().get(i).get(j);
-				rhs.addTerm(this.network.getC().size() + 2, x);
+				GRBLinExpr expr = new GRBLinExpr();
+				expr.addConstant(1);
+				expr.addTerm(-1, this.variables.getX().get(i).get(j));
+				rhs.multAdd(this.network.getN().size(), expr);
 				
 				this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Cosntraint11");
 			}
@@ -238,7 +315,7 @@ public class Constraints {
 				
 				GRBLinExpr rhs = new GRBLinExpr();
 				rhs.addConstant(1);
-				rhs.addTerm(-(this.network.getC().size() + 2), this.variables.getP().get(i).get(j));
+				rhs.addTerm(-this.network.getN().size(), this.variables.getP().get(i).get(j));
 				
 				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint12");
 			}
@@ -260,7 +337,7 @@ public class Constraints {
 				expr.addTerm(-1, this.variables.getP().get(i).get(j));
 				
 				rhs.addConstant(-1);
-				rhs.multAdd(this.network.getC().size() + 2, expr);
+				rhs.multAdd(this.network.getN().size(), expr);
 				
 				this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint13");			
 			}
@@ -286,7 +363,7 @@ public class Constraints {
 			for(Node k : this.network.getNPlus()) {
 				if(i == k) continue;
 				for(Node l : this.network.getC()) {
-					if(!isSortie(i, i, k)) continue;
+					if(l == i || l == k) continue;
 					for(Drone v : this.network.getV()) {
 						GRBLinExpr lhs = new GRBLinExpr();
 						lhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(l));
@@ -298,7 +375,7 @@ public class Constraints {
 						GRBLinExpr sum1 = new GRBLinExpr();
 						for(Node j : this.network.getC()) {
 							if(j == l) continue;
-							if(!isSortie(i, j, k));
+							if(!isSortie(v, i, j, k)) continue;
 							GRBVar y = this.variables.getY().get(v).get(i).get(j).get(k);
 							sum1.addTerm(1, y);
 						}
@@ -307,7 +384,7 @@ public class Constraints {
 						for(Node m : this.network.getC()) {
 							if(m == i || m == k || m == l) continue;
 							for(Node n : this.network.getNPlus()) {
-								if(!isSortie(l, m, n)) continue;
+								if(!isSortie(v, l, m, n)) continue;
 								if(n == i || n == k) continue;
 								GRBVar y = this.variables.getY().get(v).get(l).get(m).get(n);
 								sum2.addTerm(1, y);
@@ -319,7 +396,7 @@ public class Constraints {
 						expr.addTerm(-1, this.variables.getP().get(i).get(l));
 						
 						rhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
-						rhs.multAdd(-this.M, sum2);
+						rhs.multAdd(-this.M, expr);
 						
 						this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint15");
 					}
@@ -340,7 +417,7 @@ public class Constraints {
 				for(Node j : this.network.getC()) {
 					if(j == i )continue;
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 				}
@@ -383,7 +460,7 @@ public class Constraints {
 				rhs.addConstant(-M);
 				rhs.addTerm(M, this.variables.getzDroneLaunchedSecond().get(v).get(i));
 				
-				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint17");
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint18");
 			}
 		}
 	}
@@ -441,7 +518,7 @@ public class Constraints {
 					GRBLinExpr expr = new GRBLinExpr();
 					expr.addConstant(1);
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 					
@@ -449,7 +526,7 @@ public class Constraints {
 					rhs.addConstant(i.getDroneDistanceTo(j, v));
 					rhs.multAdd(-M, expr);
 					
-					this.model.addConstr(lhs, GRB.GREATER_EQUAL, expr, "Constraint21");
+					this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint21");
 				}
 			}
 		}
@@ -467,15 +544,15 @@ public class Constraints {
 					GRBLinExpr expr = new GRBLinExpr();
 					expr.addConstant(1);
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 					
 					rhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(i));
 					rhs.addConstant(i.getDroneDistanceTo(j, v));
-					rhs.multAdd(+M, expr);
+					rhs.multAdd(M, expr);
 					
-					this.model.addConstr(lhs, GRB.LESS_EQUAL, expr, "Constraint22");
+					this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint22[" + v.getIndex() + "][" + j.getIndex() + "][" + i.getIndex() + "]");
 				}
 			}
 		}
@@ -492,7 +569,7 @@ public class Constraints {
 				for(Node i : this.network.getN0()) {
 					if(i == j) continue;
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						expr.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 				}
@@ -517,7 +594,7 @@ public class Constraints {
 				for(Node i : this.network.getN0()) {
 					if(i == j) continue;
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 				}
@@ -575,7 +652,7 @@ public class Constraints {
 					
 					GRBLinExpr rhs = new GRBLinExpr();
 					rhs.addTerm(1, this.variables.getDroneArrival().get(v2).get(k));
-					rhs.addConstant(k.getDroneRetrievalTime(v2));
+					rhs.addConstant(k.getDroneRetrievalTime(v));
 					rhs.addConstant(-M);
 					rhs.addTerm(M, this.variables.getzTwoDroneRetrieval().get(v2).get(v).get(k));
 					
@@ -594,8 +671,8 @@ public class Constraints {
 					lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
 					
 					GRBLinExpr rhs = new GRBLinExpr();
-					rhs.addTerm(1, this.variables.getDroneArrival().get(v2).get(k));
-					rhs.addConstant(k.getDroneRetrievalTime(v2));
+					rhs.addTerm(1, this.variables.getDroneCompletion().get(v2).get(k));
+					rhs.addConstant(k.getDroneRetrievalTime(v));
 					rhs.addConstant(-M);
 					rhs.addTerm(M, this.variables.getzFirstLaunchSecondRetrieval().get(v2).get(v).get(k));
 					
@@ -617,15 +694,15 @@ public class Constraints {
 					GRBLinExpr expr = new GRBLinExpr();
 					expr.addConstant(1);
 					for(Node i : this.network.getN0()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 					rhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(j));
-					rhs.addConstant(j.getDroneDistanceTo(j, v));
+					rhs.addConstant(j.getDroneDistanceTo(k, v));
 					rhs.addConstant(k.getDroneRetrievalTime(v));
 					rhs.multAdd(-M, expr);
 					
-					this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint29");
+					this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint29");
 				}
 			}
 		}
@@ -637,7 +714,7 @@ public class Constraints {
 				for(Node j : this.network.getCDrone().get(v)) {
 					if(i == j) continue;
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						GRBLinExpr lhs = new GRBLinExpr();
 						lhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
 						lhs.addConstant(-k.getDroneRetrievalTime(v));
@@ -649,7 +726,6 @@ public class Constraints {
 						rhs.addTerm(-M, this.variables.getY().get(v).get(i).get(j).get(k));
 						
 						this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint30");
-						
 					}
 				}
 			}
@@ -669,7 +745,7 @@ public class Constraints {
 				rhs.addConstant(-M);
 				rhs.addTerm(M, this.variables.getX().get(i).get(j));
 				
-				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint31");
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint31_[" + i.getIndex() + "][" + j.getIndex() + "]");
 			}
 		}
 	}
@@ -721,7 +797,7 @@ public class Constraints {
 				rhs.addConstant(-M);
 				rhs.addTerm(M, this.variables.getzDroneLaunchedFirst().get(v).get(k));
 				
-				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint33");				
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint34");				
 			}
 		}
 	}
@@ -744,14 +820,14 @@ public class Constraints {
 				for(Node i : this.network.getN0()) {
 					if(i == k) continue;
 					for(Node j : this.network.getC()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						expr.addTerm(-1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 				}
 				rhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
 				rhs.multAdd(-M, expr);
 				
-				this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint36");
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint36");
 			}
 		}
 	}
@@ -768,14 +844,14 @@ public class Constraints {
 				for(Node l : this.network.getC()) {
 					if(l == k) continue;
 					for(Node m : this.network.getNPlus()) {
-						if(!isSortie(k, l, m)) continue;
+						if(!isSortie(v, k, l, m)) continue;
 						expr.addTerm(-1, this.variables.getY().get(v).get(k).get(l).get(m));
 					}
 				}
 				rhs.addTerm(1, this.variables.getDroneCompletion().get(v).get(k));
 				rhs.multAdd(-M, expr);
 				
-				this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint36");
+				this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint37");
 			}
 		}
 	}
@@ -791,7 +867,7 @@ public class Constraints {
 				for(Node i : this.network.getN0()) {
 					if(i == k) continue;
 					for(Node j : this.network.getC()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						rhs.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 				}
@@ -813,7 +889,7 @@ public class Constraints {
 					for(Node i : this.network.getN0()) {
 						if(i == k) continue;
 						for(Node j : this.network.getC()) {
-							if(!isSortie(i, j, k)) continue;
+							if(!isSortie(v, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
 						}
 					}
@@ -836,12 +912,12 @@ public class Constraints {
 					for(Node i : this.network.getN0()) {
 						if(i == k) continue;
 						for(Node j : this.network.getC()) {
-							if(!isSortie(i, j, k)) continue;
+							if(!isSortie(v2, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v2).get(i).get(j).get(k));
 						}
 					}
 					
-					this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint39");
+					this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint40");
 				}
 			}
 		}
@@ -876,14 +952,14 @@ public class Constraints {
 					for(Node i : this.network.getN0()) {
 						if(i == k) continue;
 						for(Node j : this.network.getC()) {
-							if(!isSortie(i, j, k)) continue;
+							if(!isSortie(v, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
 						}
 					}
 					for(Node i : this.network.getN0()) {
 						if(i == k) continue;
 						for(Node j : this.network.getC()) {
-							if(!isSortie(i, j, k));
+							if(!isSortie(v2, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v2).get(i).get(j).get(k));
 						}
 					}
@@ -905,7 +981,7 @@ public class Constraints {
 				for(Node j : this.network.getC()) {
 					if(j == i) continue;
 					for(Node k : this.network.getNPlus()) {
-						if(!isSortie(i, j, k)) continue;
+						if(!isSortie(v, i, j, k)) continue;
 						rhs.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
 					}
 				}
@@ -927,7 +1003,7 @@ public class Constraints {
 					for(Node j : this.network.getC()) {
 						if(i == j) continue;
 						for(Node k : this.network.getNPlus()) {
-							if(!isSortie(i, j, k)) continue;
+							if(!isSortie(v, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
 						}
 					}
@@ -950,12 +1026,12 @@ public class Constraints {
 					for(Node j : this.network.getC()) {
 						if(i == j) continue;
 						for(Node k : this.network.getNPlus()) {
-							if(!isSortie(i, j, k)) continue;
+							if(!isSortie(v2, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v2).get(i).get(j).get(k));
 						}
 					}
 					
-					this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint44");
+					this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Constraint45");
 				}
 			}
 		}
@@ -990,14 +1066,14 @@ public class Constraints {
 					for(Node j : this.network.getC()) {
 						if(j == i) continue;
 						for(Node k : this.network.getNPlus()) {
-							if(!isSortie(i, j, k)) continue;
+							if(!isSortie(v, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
 						}
 					}
 					for(Node j : this.network.getC()) {
 						if(j == i) continue;
 						for(Node k : this.network.getNPlus()) {
-							if(isSortie(i, j, k));
+							if(!isSortie(v2, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v2).get(i).get(j).get(k));
 						}
 					}
@@ -1020,6 +1096,7 @@ public class Constraints {
 					for(Node l : this.network.getC()) {
 						if(l == k) continue;
 						for(Node m : this.network.getNPlus()) {
+							if(!isSortie(v2, k, l, m)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v2).get(k).get(l).get(m));
 						}
 					}
@@ -1042,6 +1119,7 @@ public class Constraints {
 					for(Node l : this.network.getC()) {
 						if(l == k) continue;
 						for(Node m : this.network.getNPlus()) {
+							if(!isSortie(v, k, l, m)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v).get(k).get(l).get(m));
 						}
 					}
@@ -1064,7 +1142,7 @@ public class Constraints {
 					for(Node i : this.network.getN0()) {
 						if(i == k) continue;
 						for(Node j : this.network.getC()) {
-							if(isSortie(i, j, k)) continue;
+							if(!isSortie(v, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
 						}
 					}
@@ -1087,7 +1165,7 @@ public class Constraints {
 					for(Node i : this.network.getN0()) {
 						if(i == k) continue;
 						for(Node j : this.network.getC()) {
-							if(isSortie(i, j, k)) continue;
+							if(!isSortie(v2, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v2).get(i).get(j).get(k));
 						}
 					}
@@ -1112,14 +1190,14 @@ public class Constraints {
 					for(Node i : this.network.getN0()) {
 						if(i == k) continue;
 						for(Node j : this.network.getC()) {
-							if(!isSortie(i, j, k)) continue;
+							if(!isSortie(v, i, j, k)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
 						}
 					}
 					for(Node l : this.network.getC()) {
 						if(l == k) continue;
 						for(Node m : this.network.getNPlus()) {
-							if(!isSortie(k, l, m)) continue;
+							if(!isSortie(v2, k, l, m)) continue;
 							rhs.addTerm(1, this.variables.getY().get(v2).get(k).get(l).get(m));
 						}
 					}

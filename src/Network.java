@@ -1,5 +1,8 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +11,9 @@ import java.util.Random;
 import javax.print.attribute.HashAttributeSet;
 
 public class Network {
+	Random random = new Random(0);
+	private double droneEligableProbability = 0.7;
+	
 	private ArrayList<Node> C;
 	private ArrayList<Drone> V;
 	private HashMap<Drone, ArrayList<Node>> CDrone;
@@ -19,14 +25,16 @@ public class Network {
 	private Node startingDepot;
 	private Node endingDepot;
 	
-	private double fixedTruckServiceTime = 1;
-	private double fixedDroneLaunchTime = 1;
-	private double fixedDroneRetrievalTime = 1;
-	private double fixedDroneServiceTime = 1;
+	private double fixedTruckServiceTime = 30;
+	private double fixedDroneLaunchTime = 60;
+	private double fixedDroneRetrievalTime = 30;
+	private double fixedDroneServiceTime = 60;
 	
-	public Network(int droneLimit) throws FileNotFoundException {
-		this.C = new ArrayList<>();
+	public Network(int droneLimit) throws IOException {
 		this.V = new ArrayList<>();
+		populateDrones(droneLimit);
+		
+		this.C = new ArrayList<>();
 		this.CDrone = new HashMap();
 		for(Drone v : this.V) {
 			this.CDrone.put(v, new ArrayList<Node>());
@@ -36,23 +44,39 @@ public class Network {
 		this.N0 = new ArrayList();
 		this.vehicle = new Vehicle(sumParcelWeight());
 		
-		randomDataPointGeneration(10, 4, 10, 10);
-		writePositionsToCsv();
+		readNodeInformation();
+		populateSets();
+		readDistanceMatrix();
+		randomServiceTimeGeneration();
+		int x = 0;
 	}
 	
 	private int sumParcelWeight() {
 		int sum = 0;
 		for(Node node : this.C) {
-			sum += node.getParcelWeight();
+			sum += node.getParcelVolume();
 		}
 		
 		return sum;
 	}
 	
 	private void randomServiceTimeGeneration() {
+		for(Drone v: this.V) {
+			this.startingDepot.setDroneLaunchTime(v, fixedDroneLaunchTime);
+		}
+		for(Drone v: this.V) {
+			this.endingDepot.setDroneRetrievalTime(v, fixedDroneRetrievalTime);
+		}
+		
 		for(Node i : this.C) {
 			i.setTruckServiceTime(this.fixedTruckServiceTime);
+			for(Drone v : this.V) {
+				i.setDroneLaunchTime(v, fixedDroneLaunchTime);
+				i.setDroneRetrievalTime(v, fixedDroneLaunchTime);
+				i.setDroneServiceTime(v, this.fixedDroneServiceTime);
+			}
 		}
+		
 		
 		for(Drone v : this.V) {
 			for(Node i : this.CDrone.get(v)) {
@@ -65,58 +89,87 @@ public class Network {
 	
 	private void populateDrones(int droneLimit) {
 		for(int i = 0; i<droneLimit; i++) {
-			Drone drone = new Drone(i, 0.5, 70);
+			Drone drone = new Drone(i, 0.5, Integer.MAX_VALUE);
 			this.V.add(drone);
 		}
 	}
-	private void randomDataPointGeneration(int numberOfCustomers, int numberOfDroneNodes, int range, int parcelRange) {
-		Random random = new Random(0);
-		
-		Node startingDepot = new Node(Type.TRUCK, 0, new Position(0, 0), 0);
-		Node endingDepot = new Node(Type.TRUCK, numberOfCustomers+1, new Position(0, 0), 0);
-		
-		this.startingDepot = startingDepot;
-		this.endingDepot = endingDepot;
-		
-		this.N.add(startingDepot);
-		this.N.add(endingDepot);
-		
-		this.NPlus.add(endingDepot);
-		this.N0.add(startingDepot);
-		
-		for(int i = 1; i<numberOfDroneNodes+1; i++) {
-			Position position = new Position(random.nextDouble()* range, random.nextDouble() * range);
-			Node node  = new Node(Type.UAVELIGBLE, i, position, random.nextInt(parcelRange) + 1);
-			this.C.add(node);
-			for(Drone v : this.V) {
-				this.CDrone.get(v).add(node);
-			}
-			this.N.add(node);
-			this.NPlus.add(node);
-			this.N0.add(node);
-		}
-		
-		for(int i = numberOfDroneNodes+1; i<numberOfCustomers+1; i++) {
-			Position position = new Position(random.nextDouble()* range, random.nextDouble() * range);
-			Node node  = new Node(Type.TRUCK, i, position, random.nextInt(parcelRange) + 1);
-			this.C.add(node);
-			this.N.add(node);
-			this.NPlus.add(node);
-			this.N0.add(node);
-		}	
-	}
-	private void writePositionsToCsv() throws FileNotFoundException {
-		File file = new File("network.csv");
-		PrintWriter out = new PrintWriter(file);
-		
-		out.println("Index, x, y");
-		for(Node node : this.C) {
-			out.printf("%d, %f, %f\n", node.getIndex(), node.getPosition().getX(), node.getPosition().getY());
-		}
-		
-		out.close();
-	}
 
+	private void readNodeInformation() throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader("..\\Python\\JavaData\\NodeInformation.csv"));
+		String line = "";
+		
+		line = br.readLine();
+		line = br.readLine();
+		String[] tokens = line.split(",");
+		Position depotPos = new Position(Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]));
+		Node startDepot = new Node("TRUCK", 0, depotPos, 0);
+		
+		this.N.add(startDepot);
+		
+		this.N0.add(startDepot);
+		
+		this.startingDepot = startDepot;
+		
+		while((line = br.readLine()) != null) {
+			tokens = line.split(",");
+			Position pos = new Position(Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]));	
+			Node node = new Node(tokens[4], Integer.parseInt(tokens[1]), pos, Double.parseDouble(tokens[5]));
+			this.N.add(node);
+			
+			if(Double.parseDouble(tokens[5]) == 0) {
+				this.endingDepot = node;
+				this.NPlus.add(node);
+			}
+		}
+		
+	}
+	
+	private void populateSets() {
+		for(Node node : this.N) {
+			if(node == this.endingDepot || node == this.startingDepot) continue;
+			if(node.getType() == Type.UAVELIGIBLE) {
+				this.C.add(node);
+				for(Drone v : this.V) {
+					this.CDrone.get(v).add(node);
+				}
+				this.NPlus.add(node);
+				this.N0.add(node);
+			}
+			else if(node.getType() == Type.TRUCK) {
+				this.C.add(node);
+				this.NPlus.add(node);
+				this.N0.add(node);
+			}
+		}
+	}
+	
+	private Node findNodeByIndex(int index) {
+		for(Node node : this.N) {
+			if(node.getIndex() == index) {
+				return node;
+			}
+		}
+		return null;
+	}
+	
+	private void readDistanceMatrix() throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader("C:\\IE502QGIS\\Jupyter\\JavaData\\DistanceMatrix.csv"));
+		String line = "";
+		line = br.readLine();
+		String[] columns = line.split(",");
+		
+		while((line = br.readLine()) != null) {
+			String[] tokens = line.split(",");
+			Node sourceNode = findNodeByIndex(Integer.parseInt(tokens[0]));
+			
+			for(int colNumber = 1; colNumber<columns.length; colNumber++) {
+				Node destNode = findNodeByIndex(colNumber - 1);
+				double distance = Double.parseDouble(tokens[colNumber]);
+				sourceNode.addDistanceTo(destNode, distance);
+			}
+		}
+	}
+	// Getter setters.
 	public ArrayList<Node> getC() {
 		return C;
 	}
