@@ -1,0 +1,2 @@
+eclipse.preferences.version=1
+prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<watchExpressions>\r\n    <expression enabled\="true" text\="this.variables.getzDroneLaunchedSecond().get(v).get(i)"/>\r\n    <expression enabled\="true" text\="this.variables.getX().get(this.network.getStartingDepot())"/>\r\n    <expression enabled\="true" text\="this.variables.getTruckService().get(i)"/>\r\n</watchExpressions>\r\n

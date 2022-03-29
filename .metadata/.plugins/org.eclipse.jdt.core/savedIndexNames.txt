@@ -1,0 +1,6 @@
+INDEX VERSION 1.131+C:\Users\ulvif\OneDrive\Masaüstü\IE502\.metadata\.plugins\org.eclipse.jdt.core
+75931715.index
+586562978.index
+110541584.index
+1865797976.index
+226706450.index

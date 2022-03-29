@@ -1,0 +1,30 @@
+import gurobi.GRB;
+import gurobi.GRBConstr;
+import gurobi.GRBEnv;
+import gurobi.GRBException;
+import gurobi.GRBModel;
+
+public class Model {
+	GRBModel model;
+	
+	public Model(Network network) throws GRBException {
+		GRBEnv env = new GRBEnv();
+		this.model = new GRBModel(env);
+		
+		Variables variables = new Variables(network, model);
+		Objective obj = new Objective(model, variables, network);
+		Constraints constraints = new Constraints(model, network, variables);
+		
+		if(this.model.get(GRB.IntAttr.Status) == GRB.INFEASIBLE) {
+			this.model.computeIIS();
+			
+			for(GRBConstr c : this.model.getConstrs()) {
+				if(c.get(GRB.IntAttr.IISConstr) == 1) {
+					System.out.println(c.get(GRB.StringAttr.ConstrName));
+				}
+			}
+		}
+		
+		this.model.optimize();
+	}
+}

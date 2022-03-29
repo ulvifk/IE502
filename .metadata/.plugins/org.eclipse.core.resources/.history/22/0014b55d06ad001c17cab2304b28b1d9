@@ -1,0 +1,93 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Locale;
+
+import gurobi.GRB;
+import gurobi.GRBException;
+import gurobi.GRBVar;
+
+public class WriteData {
+	private Network network;
+	private Variables variables;
+	
+	public WriteData(Network network, Variables variables) throws GRBException, IOException {
+		this.network = network;
+		this.variables = variables;
+		
+		writeNodesToCsv();
+		writeTruckRouteToCsv();
+		writeDroneRouteToCsv()
+	}
+	
+	private void writeNodesToCsv() throws IOException {
+		PrintWriter out = new PrintWriter(new File("C:\\IE502QGIS\\Jupyter\\SolutionData\\Nodes.csv"));
+		
+		out.println("Index,X,Y,Type");
+		for(Node i : this.network.getN()) {
+			String s = String.format(Locale.ROOT, "%d,%f,%f,%s", i.getIndex(), i.getPosition().getX(), i.getPosition().getY(), i.getType());
+			out.println(s);
+		}
+		
+		out.close();
+	}
+
+	private void writeTruckRouteToCsv() throws GRBException, FileNotFoundException {
+		ArrayList<Node> order = new ArrayList<>();
+		order.add(network.getStartingDepot());
+		orderTruckRoute(order, network.getStartingDepot(), network.getEndingDepot());
+		
+		PrintWriter out = new PrintWriter(new File("C:\\IE502QGIS\\Jupyter\\SolutionData\\TruckRoute.csv"));
+		
+		out.println("Index,X,Y");
+		for(Node i : order) {
+			String s = String.format(Locale.ROOT, "%d,%f,%f", i.getIndex(), i.getPosition().getX(), i.getPosition().getY());
+			out.println(s);
+		}
+		
+		out.close();
+		
+	}
+
+	private void writeDroneRouteToCsv() throws FileNotFoundException, GRBException {
+		PrintWriter out = new PrintWriter(new File("C:\\IE502QGIS\\Jupyter\\SolutionData\\DroneRoute.csv"));
+		out.println("DroneIndex,iX,iY,jX,jY,kX,kY");
+		
+		for(Drone v : this.variables.getY().keySet()) {
+			for(Node i : this.variables.getY().get(v).keySet()) {
+				for(Node j : this.variables.getY().get(v).get(i).keySet()) {
+					for(Node k : this.variables.getY().get(v).get(i).get(j).keySet()) {
+						GRBVar y = this.variables.getY().get(v).get(i).get(j).get(k);
+						double yValue = y.get(GRB.DoubleAttr.X);
+						if(yValue > 0.7) {
+							String s = String.format(Locale.ROOT, "%d,%f,%f,%f,%f,%f,%f", v.getIndex(), i.getPosition().getX(), i.getPosition().getY(),
+																							j.getPosition().getX(), j.getPosition().getY(),
+																							k.getPosition().getX(), k.getPosition().getY());						
+						}
+					}
+				}
+			}
+		}
+		out.close();
+	}
+	private void orderTruckRoute(ArrayList<Node> order, Node i, Node stop) throws GRBException {
+		if(i == stop) return;
+		
+		Node nextNode = null;
+		for(Node j : this.variables.getX().get(i).keySet()) {
+			GRBVar x = this.variables.getX().get(i).get(j);
+			double xValue = x.get(GRB.DoubleAttr.X);
+			if(xValue > 0.8) {
+				nextNode = j;
+				break;
+			}
+		}
+		order.add(nextNode);
+		
+		orderTruckRoute(order, nextNode, stop);
+	}
+}
