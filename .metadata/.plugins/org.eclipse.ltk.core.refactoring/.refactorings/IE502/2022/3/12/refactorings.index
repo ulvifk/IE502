@@ -1,6 +1,0 @@
-1647528261167	Rename local variable 'departDepot'
-1647528270683	Rename local variable 'arrivalDepot'
-1647692887109	Rename method 'randomDataGeneration'
-1647693121579	Rename method 'getDroveServiceTime'
-1647693173237	Rename field 'serviceTime'
-1647697315358	Rename method 'writeNetworkToCsv'

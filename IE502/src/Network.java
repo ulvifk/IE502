@@ -153,7 +153,7 @@ public class Network {
 	}
 	
 	private void readDistanceMatrix() throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader("C:\\IE502QGIS\\Jupyter\\JavaData\\DistanceMatrix.csv"));
+		BufferedReader br = new BufferedReader(new FileReader("..\\Python\\JavaData\\DistanceMatrix.csv"));
 		String line = "";
 		line = br.readLine();
 		String[] columns = line.split(",");
