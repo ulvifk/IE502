@@ -1,0 +1,60 @@
+
+Gurobi 9.5.0 (win64) logging started Fri Apr  1 19:32:21 2022
+
+Set parameter LogFile to value "..\Python\SolutionData\Data_10_1logFile.txt"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+Optimize a model with 439 rows, 215 columns and 1487 nonzeros
+Model fingerprint: 0x6716f401
+Variable types: 43 continuous, 172 integer (172 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+04]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+01]
+  RHS range        [1e+00, 4e+04]
+Presolve removed 176 rows and 69 columns
+Presolve time: 0.00s
+Presolved: 263 rows, 146 columns, 893 nonzeros
+Variable types: 19 continuous, 127 integer (127 binary)
+Found heuristic solution: objective 18658.710000
+Found heuristic solution: objective 17216.950000
+
+Root relaxation: objective 0.000000e+00, 123 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    6 17216.9500    0.00000   100%     -    0s
+     0     0    0.00000    0   22 17216.9500    0.00000   100%     -    0s
+H    0     0                    17149.150000    0.00000   100%     -    0s
+H    0     0                    16622.850000    0.00000   100%     -    0s
+     0     0    0.00000    0   16 16622.8500    0.00000   100%     -    0s
+H    0     0                    16372.220000    0.00000   100%     -    0s
+     0     0    0.00000    0   14 16372.2200    0.00000   100%     -    0s
+     0     0    0.00000    0   43 16372.2200    0.00000   100%     -    0s
+     0     0    0.00000    0    7 16372.2200    0.00000   100%     -    0s
+     0     0    0.00000    0   16 16372.2200    0.00000   100%     -    0s
+     0     0    0.00000    0   12 16372.2200    0.00000   100%     -    0s
+     0     0    0.00000    0   33 16372.2200    0.00000   100%     -    0s
+     0     0    0.00000    0    7 16372.2200    0.00000   100%     -    0s
+     0     0    0.00000    0    7 16372.2200    0.00000   100%     -    0s
+     0     2    0.00000    0    7 16372.2200    0.00000   100%     -    0s
+H   94   142                    15648.330000    0.00000   100%  43.2    0s
+*  440   407              39    15227.340000    0.00000   100%  36.9    0s
+H  490   407                    15058.870000    0.00000   100%  36.3    0s
+*  502   407              39    15003.510000    0.00000   100%  36.0    0s
+H  786   519                    14761.320000    0.00000   100%  32.7    0s
+H 1288   602                    14601.160000    0.00000   100%  29.1    0s
+H 1484   677                    14274.390000    0.00000   100%  29.0    0s
+H 1535   678                    14047.150000    0.00000   100%  29.0    0s
+H 3415  1155                    14031.910000    0.00000   100%  27.2    1s
+* 8734   875              27    13916.920000    0.00000   100%  27.0    2s
+*10966   922              35    13897.020000    0.00000   100%  31.1    2s
+H12714   977                    13824.070000    0.00000   100%  33.4    3s
+H16524  1042                    13824.069999    0.00000   100%  36.6    4s
+ 19451  1136 infeasible   38      13824.0700    0.00000   100%  38.5    5s
+H23881  1020                    13824.069997    0.00000   100%  40.2    6s
+*43150  1243              47    13646.100000    0.00000   100%  43.7    9s
+ 46349  1240 1448.21204   46   12 13646.1000    0.00000   100%  44.0   10s
+H54170  1375                    13646.099997    0.00000   100%  45.0   11s
+ 70726  1552 1339.53000   59    8 13646.1000    0.00000   100%  46.1   15s

@@ -1,4 +1,7 @@
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -13,9 +16,16 @@ public class Model {
 	GRBModel model;
 	Variables variables;
 	
-	public Model(Network network) throws GRBException, IOException {
+	public Model(Network network, String folderLocation) throws GRBException, IOException {
+		File folder = new File(folderLocation);
+		if(!Files.exists(Paths.get(folderLocation))) {
+			folder.mkdir();
+		}
+		
 		GRBEnv env = new GRBEnv();
 		this.model = new GRBModel(env);
+
+		model.getEnv().set(GRB.StringParam.LogFile, folderLocation + "\\logFile.txt");
 		
 		this.variables = new Variables(network, model);
 		Objective obj = new Objective(model, variables, network);
@@ -32,6 +42,16 @@ public class Model {
 				}
 			}
 		}
+		
+		
+		WriteData writeData = new WriteData(network, variables, folderLocation);
+		this.model.write(folderLocation + "\\model.lp");
+		
+		this.model.dispose();
+		env.dispose();
+	}
+	
+	private void printSolution(Network network, GRBModel mode) throws GRBException {
 		for(Drone v : this.variables.getY().keySet()) {
 			for(Node i : this.variables.getY().get(v).keySet()) {
 				for(Node j : this.variables.getY().get(v).get(i).keySet()) {
@@ -68,10 +88,6 @@ public class Model {
 				}
 			}
 		}
-		WriteData writeData = new WriteData(network, variables);
-		
-		this.model.dispose();
-		env.dispose();
 	}
 
 }

@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -15,17 +17,17 @@ public class WriteData {
 	private Network network;
 	private Variables variables;
 	
-	public WriteData(Network network, Variables variables) throws GRBException, IOException {
+	public WriteData(Network network, Variables variables, String folderLocation) throws GRBException, IOException {
 		this.network = network;
 		this.variables = variables;
 		
-		writeNodesToCsv();
-		writeTruckRouteToCsv();
-		writeDroneRouteToCsv();
+		writeNodesToCsv(folderLocation);
+		writeTruckRouteToCsv(folderLocation);
+		writeDroneRouteToCsv(folderLocation);
 	}
 	
-	private void writeNodesToCsv() throws IOException {
-		PrintWriter out = new PrintWriter(new File("..\\Python\\SolutionData\\Nodes.csv"));
+	private void writeNodesToCsv(String folderLocation) throws IOException {
+		PrintWriter out = new PrintWriter(new File(folderLocation + "\\Nodes.csv"));
 		
 		out.println("Index,X,Y,Type");
 		for(Node i : this.network.getN()) {
@@ -36,12 +38,12 @@ public class WriteData {
 		out.close();
 	}
 
-	private void writeTruckRouteToCsv() throws GRBException, FileNotFoundException {
+	private void writeTruckRouteToCsv(String folderLocation) throws GRBException, FileNotFoundException {
 		ArrayList<Node> order = new ArrayList<>();
 		order.add(network.getStartingDepot());
 		orderTruckRoute(order, network.getStartingDepot(), network.getEndingDepot());
 		
-		PrintWriter out = new PrintWriter(new File("..\\Python\\SolutionData\\TruckRoute.csv"));
+		PrintWriter out = new PrintWriter(new File(folderLocation + "\\TruckRoute.csv"));
 		
 		out.println("Index,X,Y,CompletionTime");
 		for(Node i : order) {
@@ -53,8 +55,8 @@ public class WriteData {
 		
 	}
 
-	private void writeDroneRouteToCsv() throws FileNotFoundException, GRBException {
-		PrintWriter out = new PrintWriter(new File("..\\Python\\SolutionData\\DroneRoute.csv"));
+	private void writeDroneRouteToCsv(String folderLocation) throws FileNotFoundException, GRBException {
+		PrintWriter out = new PrintWriter(new File(folderLocation + "\\DroneRoute.csv"));
 		out.println("DroneIndex,iIndex,jIndex,kIndex,iX,iY,jX,jY,kX,kY,Launch[i],Arrival[j],Launch[j],Retrieval[k]");
 		
 		for(Drone v : this.variables.getY().keySet()) {

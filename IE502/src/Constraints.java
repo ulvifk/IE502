@@ -10,12 +10,14 @@ public class Constraints {
 	private GRBModel model;
 	private Network network;
 	private Variables variables;
-	private int M = 1000000;
+	private double M; // Sum of all edges / 5
+	
 	
 	public Constraints(GRBModel model, Network network, Variables variables) throws GRBException {
 		this.model = model;
 		this.network = network;
 		this.variables = variables;
+		findM();
 		depotP();
 		startingDepotTruckTimes();
 		startingDepotDroneOrderDoesNotMatter();
@@ -74,6 +76,18 @@ public class Constraints {
 		constraint55();
 	}
 	
+	private void findM() {
+		double sum = 0;
+		for(Node i : this.network.getN()) {
+			for(Node j : this.network.getN()) {
+				if(i == j) continue;
+				sum += i.getTruckDistanceTo(j);
+			}
+		}
+		
+		this.M = sum / 5;
+	}
+
 	private boolean isSortie(Drone v, Node i, Node j, Node k) {
 		if(i == j) return false;
 		if(i == k) return false;

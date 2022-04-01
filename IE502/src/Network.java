@@ -30,7 +30,7 @@ public class Network {
 	private double fixedDroneRetrievalTime = 30;
 	private double fixedDroneServiceTime = 60;
 	
-	public Network(int droneLimit) throws IOException {
+	public Network(int droneLimit, String fileLocation) throws IOException {
 		this.V = new ArrayList<>();
 		populateDrones(droneLimit);
 		
@@ -44,9 +44,9 @@ public class Network {
 		this.N0 = new ArrayList();
 		this.vehicle = new Vehicle(sumParcelWeight());
 		
-		readNodeInformation();
+		readNodeInformation(fileLocation);
 		populateSets();
-		readDistanceMatrix();
+		readDistanceMatrix(fileLocation);
 		randomServiceTimeGeneration();
 		int x = 0;
 	}
@@ -94,14 +94,14 @@ public class Network {
 		}
 	}
 
-	private void readNodeInformation() throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader("..\\Python\\JavaData\\NodeInformation.csv"));
+	private void readNodeInformation(String fileLocation) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileLocation));
 		String line = "";
 		
 		line = br.readLine();
 		line = br.readLine();
 		String[] tokens = line.split(",");
-		Position depotPos = new Position(Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]));
+		Position depotPos = new Position(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
 		Node startDepot = new Node("TRUCK", 0, depotPos, 0);
 		
 		this.N.add(startDepot);
@@ -112,11 +112,11 @@ public class Network {
 		
 		while((line = br.readLine()) != null) {
 			tokens = line.split(",");
-			Position pos = new Position(Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]));	
-			Node node = new Node(tokens[4], Integer.parseInt(tokens[1]), pos, Double.parseDouble(tokens[5]));
+			Position pos = new Position(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));	
+			Node node = new Node(tokens[3], Integer.parseInt(tokens[0]), pos, Double.parseDouble(tokens[4]));
 			this.N.add(node);
 			
-			if(Double.parseDouble(tokens[5]) == 0) {
+			if(Double.parseDouble(tokens[4]) == 0) {
 				this.endingDepot = node;
 				this.NPlus.add(node);
 			}
@@ -152,8 +152,8 @@ public class Network {
 		return null;
 	}
 	
-	private void readDistanceMatrix() throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader("..\\Python\\JavaData\\DistanceMatrix.csv"));
+	private void readDistanceMatrix(String fileLocation) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileLocation + "_DistanceMatrix.csv"));
 		String line = "";
 		line = br.readLine();
 		String[] columns = line.split(",");
