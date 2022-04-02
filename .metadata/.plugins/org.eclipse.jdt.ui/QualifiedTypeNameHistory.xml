@@ -6,4 +6,19 @@
     <fullyQualifiedTypeName name="java.nio.file.Paths"/>
     <fullyQualifiedTypeName name="gurobi.GRB.IntParam"/>
     <fullyQualifiedTypeName name="gurobi.GRB.StringParam"/>
+    <fullyQualifiedTypeName name="org.w3c.dom.Node"/>
+    <fullyQualifiedTypeName name="gurobi.GRBLinExpr"/>
+    <fullyQualifiedTypeName name="gurobi.GRB"/>
+    <fullyQualifiedTypeName name="TSP.TSPVariables"/>
+    <fullyQualifiedTypeName name="gurobi.GRBEnv"/>
+    <fullyQualifiedTypeName name="org.jcp.xml.dsig.internal.MacOutputStream"/>
+    <fullyQualifiedTypeName name="gurobi.GRBModel"/>
+    <fullyQualifiedTypeName name="TSP.TSPConstraints"/>
+    <fullyQualifiedTypeName name="TSP.TSPObjective"/>
+    <fullyQualifiedTypeName name="TSP.TSPModel"/>
+    <fullyQualifiedTypeName name="TSP.TSPWriteData"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="gurobi.GRBVar"/>
+    <fullyQualifiedTypeName name="gurobi.GRB.DoubleAttr"/>
+    <fullyQualifiedTypeName name="gurobi.GRB.DoubleParam"/>
 </qualifiedTypeNameHistroy>
