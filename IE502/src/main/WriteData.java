@@ -25,6 +25,7 @@ public class WriteData {
 		writeNodesToCsv(folderLocation);
 		writeTruckRouteToCsv(folderLocation);
 		writeDroneRouteToCsv(folderLocation);
+		writeServedCustomers(folderLocation);
 	}
 	
 	private void writeNodesToCsv(String folderLocation) throws IOException {
@@ -96,5 +97,22 @@ public class WriteData {
 		order.add(nextNode);
 		
 		orderTruckRoute(order, nextNode, stop);
+	}
+
+	private void writeServedCustomers(String folderLocation) throws GRBException, FileNotFoundException {
+		PrintWriter out = new PrintWriter(new File(folderLocation + "\\Customers.csv"));
+		out.println("IsServed,CustomerIndex,Penalty,ParcelVolume");
+		
+		
+		for(Node i : this.network.getC()) {
+			double val = this.variables.getCustomerServiceVar().get(i).get(GRB.DoubleAttr.X);
+			int varValue = 0;
+			if(val > 0.5) varValue = 1;
+			else varValue = 0;
+			
+			out.println(String.format(Locale.ROOT, "%d,%d,%f,%f", varValue, i.getIndex(), i.getPenalty(), i.getParcelVolume()));
+		}
+		
+		out.close();
 	}
 }

@@ -18,9 +18,16 @@ public class Objective {
 	
 	private void setObjective(double lowerBound) throws GRBException {
 		GRBLinExpr obj = new GRBLinExpr();
-		obj.addTerm(1, this.variables.getTruckCompletion().get(this.network.getEndingDepot()));
+		obj.addTerm(this.network.sigmaTime, this.variables.getTruckCompletion().get(this.network.getEndingDepot()));
 		
-		this.model.addConstr(obj, GRB.LESS_EQUAL, lowerBound, null);
+		GRBLinExpr penaltySum = new GRBLinExpr();
+		for(Node j : this.network.getC()) {
+			penaltySum.addConstant(j.getPenalty());
+			penaltySum.addTerm(-j.getPenalty(), this.variables.getCustomerServiceVar().get(j));
+		}
+		
+		obj.multAdd(this.network.sigmaPenalty, penaltySum);
+		
 		this.model.setObjective(obj, GRB.MINIMIZE);
 		
 	}

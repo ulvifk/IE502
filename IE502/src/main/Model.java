@@ -18,6 +18,9 @@ public class Model {
 	GRBModel model;
 	Variables variables;
 	
+	public double sigmaPenalty;
+	public double sigmaTime;
+	
 	public Model(Network network, String folderLocation, double lowerBound) throws GRBException, IOException {
 		File folder = new File(folderLocation);
 		if(!Files.exists(Paths.get(folderLocation))) {

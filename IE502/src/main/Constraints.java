@@ -22,7 +22,12 @@ public class Constraints {
 		depotP();
 		startingDepotTruckTimes();
 		startingDepotDroneOrderDoesNotMatter();
-		constraint2();
+		
+		customerServiceLink();
+		droneUsageLink();
+		truckCapacity();
+		
+//		constraint2();
 		constraint3and4();
 		constraint5();
 		constraint6();
@@ -115,6 +120,96 @@ public class Constraints {
 	private void startingDepotDroneOrderDoesNotMatter() throws GRBException {
 		for(Drone v : this.network.getV()) {
 			this.model.addConstr(this.variables.getzDroneRetrievedFirst().get(v).get(this.network.getEndingDepot()), GRB.EQUAL, 0, null);
+		}
+	}
+	
+	private void droneUsageLink() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			GRBLinExpr lhs = new GRBLinExpr();
+			for(Node i : this.network.getN0()) {
+				for(Node j : this.network.getCDrone().get(v)) {
+					if(i == j) continue;
+					for(Node k : this.network.getNPlus()) {
+						if(!isSortie(v, i, j, k)) continue;
+						lhs.addTerm(1, this.variables.getY().get(v).get(i).get(j).get(k));
+					}
+				}
+			}
+			
+			double bigM = Math.pow(this.network.getN().size(), 3) * this.network.getV().size();
+			GRBLinExpr rhs = new GRBLinExpr();
+			rhs.addTerm(bigM, this.variables.getDroneUsageVar().get(v));
+			
+			this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Drone usage");
+		}
+	}
+	
+	private void truckCapacity() throws GRBException {
+		// Upper bound to capacity. Always active. Becomes redundant if #UAV>2
+		GRBLinExpr usedCapacity = new GRBLinExpr();
+		for(Node j : this.network.getC()) {
+			usedCapacity.addTerm(j.getParcelVolume(), this.variables.getCustomerServiceVar().get(j));
+		}
+		
+		this.model.addConstr(usedCapacity, GRB.LESS_EQUAL, this.network.getVehicle().getCapacity(), "Vehicle Capacity");
+		
+		// if more than 2 drones used, some additional capacity will be used.
+		double bigM = 100000;
+		
+		// Either less than 2 drones
+		GRBLinExpr numberOfDrones = new GRBLinExpr();
+		for(Drone v : this.network.getV()) {
+			numberOfDrones.addTerm(1, this.variables.getDroneUsageVar().get(v));
+		}
+		GRBVar k = this.model.addVar(0, 1, 0, GRB.BINARY, null);
+		
+		GRBLinExpr rhs = new GRBLinExpr();
+		rhs.addConstant(2);
+		rhs.addTerm(bigM, k);
+		this.model.addConstr(numberOfDrones, GRB.LESS_EQUAL, rhs, "Less than 2 drones");
+		
+		// Or tighter capacity constraint
+		GRBLinExpr tighterRhs = new GRBLinExpr();
+		
+		GRBLinExpr numberOfDronesMinus2 = new GRBLinExpr();
+		for(Drone v : this.network.getV()) {
+			numberOfDronesMinus2.addTerm(1, this.variables.getDroneUsageVar().get(v));
+		}
+		numberOfDronesMinus2.addConstant(-2);
+		
+		tighterRhs.addConstant(this.network.getVehicle().getCapacity());
+		tighterRhs.multAdd(-this.network.getVehicle().getCapacity() * this.network.getDroneVolumePercentage(), numberOfDronesMinus2);
+		tighterRhs.addConstant(bigM);
+		tighterRhs.addTerm(-bigM, k);
+		
+		this.model.addConstr(usedCapacity, GRB.LESS_EQUAL, tighterRhs, "Tighter Capacity");
+	}
+	
+	private void customerServiceLink() throws GRBException {
+		for(Node j : this.network.getC()) {
+			GRBLinExpr xSum = new GRBLinExpr();
+			for(Node i : this.network.getN0()) {
+				if(i == j) continue;
+				GRBVar x = this.variables.getX().get(i).get(j);
+				xSum.addTerm(1, x);
+			}
+			
+			GRBLinExpr ySum = new GRBLinExpr();
+			for(Drone v : this.network.getV()) {
+				for(Node i : this.network.getN0()) {
+					if(i == j) continue;
+					for(Node k : this.network.getNPlus()) {
+						if(!isSortie(v, i, j, k)) continue;
+						GRBVar y = this.variables.getY().get(v).get(i).get(j).get(k);
+						ySum.addTerm(1, y);
+					}
+				}
+			}
+			
+			GRBLinExpr expr = new GRBLinExpr();
+			expr.add(xSum);
+			expr.add(ySum);
+			this.model.addConstr(expr, GRB.EQUAL, this.variables.getCustomerServiceVar().get(j), "Customer Service Link " + j.getIndex());
 		}
 	}
 	

@@ -29,6 +29,9 @@ public class Variables {
 	
 	private HashMap<Node, GRBVar> u;
 	
+	private HashMap<Drone, GRBVar> droneUsageVar;
+	private HashMap<Node, GRBVar> customerServiceVar;
+	
 	private Network network;
 	private GRBModel model;
 	
@@ -50,6 +53,9 @@ public class Variables {
 		this.zDroneLaunchedFirst = new HashMap();
 		this.zFirstLaunchSecondRetrieval = new HashMap();
 		this.zFirstRetrievalSecondLaunch = new HashMap();
+		
+		this.droneUsageVar = new HashMap<>();
+		this.customerServiceVar = new HashMap<>();
 		this.network = network;
 		this.model = model;
 		
@@ -70,8 +76,22 @@ public class Variables {
 		populateFirstLaunchSecondRetrieval();
 		populateFirstRetrievalSecondLaunch();
 		populateU();
+		
+		populateDroneUsageVar();
+		populateCustomerServiceVar();
 	}
 	
+	private void populateDroneUsageVar() throws GRBException {
+		for(Drone v : this.network.getV()) {
+			this.droneUsageVar.put(v, this.model.addVar(0, 1, 0, GRB.BINARY, String.format("droneUsageVar[%d]", v.getIndex())));
+		}
+	}
+	
+	private void populateCustomerServiceVar() throws GRBException {
+		for(Node i : this.network.getC()) {
+			this.customerServiceVar.put(i, this.model.addVar(0, 1, 0, GRB.BINARY, String.format("customerServiceVar[%d]", i.getIndex())));
+		}
+	}
 	private void populateX() throws GRBException {
 		for(Node i : this.network.getN0()) {
 			this.x.put(i, new HashMap<Node, GRBVar>()); 
@@ -339,6 +359,14 @@ public class Variables {
 
 	public HashMap<Node, GRBVar> getU() {
 		return u;
+	}
+
+	public HashMap<Drone, GRBVar> getDroneUsageVar() {
+		return droneUsageVar;
+	}
+
+	public HashMap<Node, GRBVar> getCustomerServiceVar() {
+		return customerServiceVar;
 	}
 
 	

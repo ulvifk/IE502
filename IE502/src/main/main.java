@@ -12,9 +12,9 @@ public class main {
 //		Network network = new Network(0);
 //		Model model = new Model(network);
 //		int x = 0;
-		int[] nArray = {10, 20, 40};
-		int iTimes = 2;
-		int[] drones = {1, 2};
+		int[] nArray = {10};
+		int iTimes = 1;
+		int[] drones = {3};
 		runAll(nArray, iTimes, drones);
 	}
 
@@ -24,11 +24,11 @@ public class main {
 				for(int droneNumber : drones) {
 					String fileLocation = String.format("..\\Python\\JavaData\\Data_%d\\Data_%d_%d", n, n, i);
 					Network network = new Network(droneNumber, fileLocation);
+					network.sigmaPenalty = 10000;
+					network.sigmaTime = 0.9;
 					
-					TSPModel TSPmodel = new TSPModel(network, "");
-					
-					String solutionWriteFolder = String.format("..\\Python\\SolutionData\\Data_%d_%d_%d", n, droneNumber, i);
-					Model model = new Model(network, solutionWriteFolder, TSPmodel.objectiveValue);
+					String solutionWriteFolder = String.format("..\\NewModel\\Data_%d_%d_%d", n, droneNumber, i);
+					Model model = new Model(network, solutionWriteFolder, 0);
 				}
 			}
 		}

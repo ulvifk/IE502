@@ -12,8 +12,12 @@ import java.util.Random;
 import javax.print.attribute.HashAttributeSet;
 
 public class Network {
+
+	public double sigmaPenalty;
+	public double sigmaTime;
+	
 	Random random = new Random(0);
-	private double droneEligableProbability = 0.7;
+	private double droneVolumePercentage = 0.15;
 	
 	private ArrayList<Node> C;
 	private ArrayList<Drone> V;
@@ -43,12 +47,15 @@ public class Network {
 		this.N = new ArrayList();
 		this.NPlus = new ArrayList();
 		this.N0 = new ArrayList();
-		this.vehicle = new Vehicle(sumParcelWeight());
+		
 		
 		readNodeInformation(fileLocation);
 		populateSets();
 		readDistanceMatrix(fileLocation);
 		randomServiceTimeGeneration();
+		generateNodePenalites();
+		
+		this.vehicle = new Vehicle(sumParcelWeight());
 		int x = 0;
 	}
 	
@@ -59,6 +66,12 @@ public class Network {
 		}
 		
 		return sum;
+	}
+	
+	private void generateNodePenalites() {
+		for(Node j : this.C) {
+			j.setPenalty(this.random.nextDouble() * 10 + 5);
+		}
 	}
 	
 	private void randomServiceTimeGeneration() {
@@ -207,5 +220,7 @@ public class Network {
 		return endingDepot;
 	}
 
-	
+	public double getDroneVolumePercentage() {
+		return droneVolumePercentage;
+	}
 }

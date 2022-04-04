@@ -8,6 +8,7 @@ public class Node {
 	private int index;
 	private Position position;
 	private double parcelVolume;
+	private double penalty;
 	
 	private HashMap<Drone, Double> launchTime;
 	private HashMap<Drone, Double> retrievalTime;
@@ -90,6 +91,14 @@ public class Node {
 	
 	public void addDistanceTo(Node node, double distance) {
 		this.distancesTo.put(node, distance);
+	}
+
+	public double getPenalty() {
+		return penalty;
+	}
+
+	public void setPenalty(double penalty) {
+		this.penalty = penalty;
 	}
 	
 	
