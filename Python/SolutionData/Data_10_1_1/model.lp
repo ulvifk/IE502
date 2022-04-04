@@ -2,7 +2,7 @@
 Minimize
   TruckCompletion_10 + 0 DroneCompletion_010 + 0 DroneRetrievedFirst010
 Subject To
- R0: TruckCompletion_10 <= 11007.308
+ R0: TruckCompletion_10 <= 11586.64
  R1: p_01 = 1
  R2: p_02 = 1
  R3: p_03 = 1

@@ -21,4 +21,5 @@
     <fullyQualifiedTypeName name="gurobi.GRBVar"/>
     <fullyQualifiedTypeName name="gurobi.GRB.DoubleAttr"/>
     <fullyQualifiedTypeName name="gurobi.GRB.DoubleParam"/>
+    <fullyQualifiedTypeName name="java.io.PrintWriter"/>
 </qualifiedTypeNameHistroy>

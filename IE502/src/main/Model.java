@@ -1,6 +1,7 @@
 package main;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Model {
 		
 		this.model.getEnv().set(GRB.DoubleParam.TimeLimit, 3600);
 		model.getEnv().set(GRB.StringParam.LogFile, folderLocation + "\\logFile.txt");
-		
+
 		this.variables = new Variables(network, model);
 		Objective obj = new Objective(model, variables, network, lowerBound);
 		Constraints constraints = new Constraints(model, network, variables);
@@ -45,9 +46,14 @@ public class Model {
 			}
 		}
 		
+		if(this.model.get(GRB.IntAttr.SolCount) != 0) {
+			WriteData writeData = new WriteData(network, variables, folderLocation);
+			this.model.write(folderLocation + "\\model.lp");
+		}
 		
-		WriteData writeData = new WriteData(network, variables, folderLocation);
-		this.model.write(folderLocation + "\\model.lp");
+		PrintWriter out = new PrintWriter(new File(folderLocation + "\\TSPObjective.txt"));
+		out.println(lowerBound);
+		out.close();
 		
 		this.model.dispose();
 		env.dispose();

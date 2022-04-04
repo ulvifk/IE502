@@ -13,8 +13,8 @@ public class main {
 //		Model model = new Model(network);
 //		int x = 0;
 		int[] nArray = {10, 20, 40};
-		int iTimes = 1;
-		int[] drones = {1};
+		int iTimes = 2;
+		int[] drones = {1, 2};
 		runAll(nArray, iTimes, drones);
 	}
 
