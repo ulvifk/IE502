@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="Model"/>
-    <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="java.nio.file.Files"/>
     <fullyQualifiedTypeName name="java.nio.file.Paths"/>
     <fullyQualifiedTypeName name="gurobi.GRB.StringParam"/>
@@ -23,4 +22,5 @@
     <fullyQualifiedTypeName name="gurobi.GRB"/>
     <fullyQualifiedTypeName name="gurobi.GRBLinExpr"/>
     <fullyQualifiedTypeName name="gurobi.GRB.DoubleAttr"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
 </qualifiedTypeNameHistroy>

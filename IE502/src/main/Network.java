@@ -35,7 +35,7 @@ public class Network {
 	private double fixedDroneRetrievalTime = 30;
 	private double fixedDroneServiceTime = 60;
 	
-	public Network(int droneLimit, String fileLocation) throws IOException {
+	public Network(int droneLimit, String fileLocation, int penaltyMin) throws IOException {
 		this.V = new ArrayList<>();
 		populateDrones(droneLimit);
 		
@@ -53,7 +53,7 @@ public class Network {
 		populateSets();
 		readDistanceMatrix(fileLocation);
 		randomServiceTimeGeneration();
-		generateNodePenalites();
+		generateNodePenalites(penaltyMin);
 		
 		this.vehicle = new Vehicle(sumParcelWeight());
 		int x = 0;
@@ -68,9 +68,9 @@ public class Network {
 		return sum;
 	}
 	
-	private void generateNodePenalites() {
+	private void generateNodePenalites(int penaltyMin) {
 		for(Node j : this.C) {
-			j.setPenalty(this.random.nextDouble() * 10 + 5);
+			j.setPenalty(penaltyMin*60);
 		}
 	}
 	

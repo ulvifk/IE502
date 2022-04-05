@@ -22,11 +22,6 @@ public class Model {
 	public double sigmaTime;
 	
 	public Model(Network network, String folderLocation, double lowerBound) throws GRBException, IOException {
-		File folder = new File(folderLocation);
-		if(!Files.exists(Paths.get(folderLocation))) {
-			folder.mkdir();
-		}
-		
 		GRBEnv env = new GRBEnv();
 		this.model = new GRBModel(env);
 		
