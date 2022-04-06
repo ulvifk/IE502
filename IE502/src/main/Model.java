@@ -30,7 +30,7 @@ public class Model {
 
 		this.variables = new Variables(network, model);
 		Objective obj = new Objective(model, variables, network, lowerBound);
-		Constraints constraints = new Constraints(model, network, variables);
+		Constraints constraints = new Constraints(model, network, variables, lowerBound);
 		this.model.optimize();
 		
 		this.model.write("Model.lp");
