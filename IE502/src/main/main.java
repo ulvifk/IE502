@@ -15,16 +15,16 @@ public class main {
 //		Network network = new Network(0);
 //		Model model = new Model(network);
 //		int x = 0;
-		int[] nArray = {8};
-		int iTimes = 1;
-		int[] drones = {2};
+		int[] nArray = {8, 10};
+		int iTimes[] = {1};
+		int[] drones = {5};
 		int[] penaltyMins = {10};
 		runAll(nArray, iTimes, drones, penaltyMins);
 	}
 
-	public static void runAll(int[] nArray, int iTimes, int[] drones, int[] penaltyMins) throws IOException, GRBException {
+	public static void runAll(int[] nArray, int[] iTimes, int[] drones, int[] penaltyMins) throws IOException, GRBException {
 		for(int n : nArray) {
-			for(int i = 1; i<=iTimes; i++) {
+			for(int i : iTimes) {
 				for(int droneNumber : drones) {
 					for(int penaltyMin : penaltyMins) {
 						String fileLocation = String.format("..\\Python\\JavaData\\Data_%d\\Data_%d_%d", n, n, i);
@@ -41,7 +41,9 @@ public class main {
 						Network network = new Network(droneNumber, fileLocation, penaltyMin);
 						network.sigmaPenalty = 1;
 						network.sigmaTime = 1;
-						Model model = new Model(network, solutionWriteFolder, 0);
+						
+						TSPModel tspModel = new TSPModel(network, fileLocation);
+						Model model = new Model(network, solutionWriteFolder, tspModel.objectiveValue);
 						
 					}
 				}
