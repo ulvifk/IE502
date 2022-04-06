@@ -12,9 +12,9 @@ public class main {
 //		Network network = new Network(0);
 //		Model model = new Model(network);
 //		int x = 0;
-		int[] nArray = {10, 20, 40};
+		int[] nArray = {10};
 		int iTimes = 2;
-		int[] drones = {1, 2};
+		int[] drones = {2};
 		runAll(nArray, iTimes, drones);
 	}
 

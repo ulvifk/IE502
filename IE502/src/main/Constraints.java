@@ -2,6 +2,7 @@ package main;
 import java.util.Locale;
 
 import gurobi.GRB;
+import gurobi.GRBConstr;
 import gurobi.GRBException;
 import gurobi.GRBLinExpr;
 import gurobi.GRBModel;
@@ -293,7 +294,8 @@ public class Constraints {
 					rhs.addConstant(1);
 					rhs.multAdd(-(this.network.getN().size()), expr);
 					
-					this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint10");
+					GRBConstr c = this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint10");
+					c.set(GRB.IntAttr.Lazy, 1);
 				}
 			}
 		}
@@ -314,7 +316,8 @@ public class Constraints {
 				expr.addTerm(-1, this.variables.getX().get(i).get(j));
 				rhs.multAdd(this.network.getN().size(), expr);
 				
-				this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Cosntraint11");
+				GRBConstr c = this.model.addConstr(lhs, GRB.LESS_EQUAL, rhs, "Cosntraint11");
+				c.set(GRB.IntAttr.Lazy, 1);
 			}
 		}
 	}
@@ -413,7 +416,8 @@ public class Constraints {
 						rhs.addTerm(1, this.variables.getDroneArrival().get(v).get(k));
 						rhs.multAdd(-this.M, expr);
 						
-						this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint15");
+						GRBConstr c = this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, "Constraint15");
+						c.set(GRB.IntAttr.Lazy, 1);
 					}
 				}
 			}
