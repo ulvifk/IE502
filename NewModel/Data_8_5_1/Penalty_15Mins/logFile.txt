@@ -1,0 +1,83 @@
+
+Gurobi 9.5.0 (win64) logging started Thu Apr  7 12:03:43 2022
+
+Set parameter LogFile to value "..\NewModel\Data_8_5_1\Penalty_15Mins\logFile.txt"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+Optimize a model with 9366 rows, 2514 columns and 172970 nonzeros
+Model fingerprint: 0x169b0dcd
+Variable types: 130 continuous, 2384 integer (2384 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+05]
+  Objective range  [1e+00, 9e+02]
+  Bounds range     [1e+00, 9e+00]
+  RHS range        [1e+00, 1e+05]
+Found heuristic solution: objective 6300.0000000
+Presolve added 0 rows and 24 columns
+Presolve removed 1498 rows and 0 columns
+Presolve time: 0.26s
+Presolved: 7868 rows, 2538 columns, 86726 nonzeros
+Extracted 1799 lazy constraints
+Variable types: 112 continuous, 2426 integer (2426 binary)
+
+Root relaxation: objective 1.800000e+03, 587 iterations, 0.03 seconds (0.06 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 1800.00000    0   12 6300.00000 1800.00000  71.4%     -    0s
+     0     0 1800.00000    0   23 6300.00000 1800.00000  71.4%     -    0s
+     0     0 1800.00000    0    9 6300.00000 1800.00000  71.4%     -    0s
+     0     0 1800.00000    0    9 6300.00000 1800.00000  71.4%     -    0s
+     0     0 1800.00000    0    4 6300.00000 1800.00000  71.4%     -    0s
+     0     0 1800.00000    0   16 6300.00000 1800.00000  71.4%     -    0s
+     0     0 1800.00000    0    9 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0    9 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0    6 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0   12 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0    9 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0   11 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0    4 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0   23 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0    8 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0    8 6300.00000 1800.00000  71.4%     -    1s
+     0     0 1800.00000    0   11 6300.00000 1800.00000  71.4%     -    3s
+     0     0 1800.00000    0   21 6300.00000 1800.00000  71.4%     -    3s
+     0     0 1800.00000    0    8 6300.00000 1800.00000  71.4%     -    3s
+     0     0 1800.00000    0   10 6300.00000 1800.00000  71.4%     -    3s
+     0     0 1800.00000    0   11 6300.00000 1800.00000  71.4%     -    3s
+     0     0 1800.00000    0   12 6300.00000 1800.00000  71.4%     -    3s
+     0     0 1800.00000    0   20 6300.00000 1800.00000  71.4%     -    3s
+     0     0 1800.00000    0   11 6300.00000 1800.00000  71.4%     -    3s
+     0     0 1800.00000    0   22 6300.00000 1800.00000  71.4%     -    4s
+     0     0 1800.00000    0   11 6300.00000 1800.00000  71.4%     -    4s
+     0     0 1800.00000    0   10 6300.00000 1800.00000  71.4%     -    4s
+     0     0 1800.00000    0    8 6300.00000 1800.00000  71.4%     -    4s
+     0     0 1800.00000    0    8 6300.00000 1800.00000  71.4%     -    4s
+     0     2 1800.00000    0    8 6300.00000 1800.00000  71.4%     -    4s
+    43    31 1800.00000    8   25 6300.00000 1800.00000  71.4%  41.4    5s
+  3460   428 1800.00000   22   24 6300.00000 1800.00000  71.4%  26.4   10s
+  5881   592 1807.14854   44   25 6300.00000 1800.00000  71.4%  28.7   15s
+  6260   571 infeasible   26      6300.00000 1800.00000  71.4%  30.0   20s
+  7881     5 infeasible   32      6300.00000 1800.00000  71.4%  34.3   25s
+
+Cutting planes:
+  Learned: 2
+  Implied bound: 79
+  Projected implied bound: 7
+  Clique: 8
+  MIR: 4
+  Flow cover: 24
+  GUB cover: 1
+  RLT: 3
+  Relax-and-lift: 15
+
+Explored 7957 nodes (288369 simplex iterations) in 25.17 seconds (39.39 work units)
+Thread count was 12 (of 12 available processors)
+
+Solution count 1: 6300 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.300000000000e+03, best bound 6.300000000000e+03, gap 0.0000%
+Warning: constraint name "Customer Service Link 1" has a space
+Warning: constraint name "Customer Service Link 1" has a space

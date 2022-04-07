@@ -15,10 +15,10 @@ public class main {
 //		Network network = new Network(0);
 //		Model model = new Model(network);
 //		int x = 0;
-		int[] nArray = {8, 10};
-		int iTimes[] = {1};
+		int[] nArray = {8, 10, 12};
+		int iTimes[] = {1, 2, 3, 4};
 		int[] drones = {5};
-		int[] penaltyMins = {10};
+		int[] penaltyMins = {10, 15, 20};
 		runAll(nArray, iTimes, drones, penaltyMins);
 	}
 
@@ -32,12 +32,12 @@ public class main {
 						if(!Files.exists(Paths.get(String.format("..\\NewModel\\Data_%d_%d_%d", n, droneNumber, i)))) {
 							folder.mkdir();
 						}
-						folder = new File(String.format("..\\NewModel\\Data_%d_%d_%d\\Penalt_%dMins", n, droneNumber, i, penaltyMin));
-						if(!Files.exists(Paths.get(String.format("..\\NewModel\\Data_%d_%d_%d\\Penalt_%dMins", n, droneNumber, i, penaltyMin)))) {
+						folder = new File(String.format("..\\NewModel\\Data_%d_%d_%d\\Penalty_%dMins", n, droneNumber, i, penaltyMin));
+						if(!Files.exists(Paths.get(String.format("..\\NewModel\\Data_%d_%d_%d\\Penalty_%dMins", n, droneNumber, i, penaltyMin)))) {
 							folder.mkdir();
 						}
 						
-						String solutionWriteFolder = String.format("..\\NewModel\\Data_%d_%d_%d\\Penalt_%dMins", n, droneNumber, i, penaltyMin);
+						String solutionWriteFolder = String.format("..\\NewModel\\Data_%d_%d_%d\\Penalty_%dMins", n, droneNumber, i, penaltyMin);
 						Network network = new Network(droneNumber, fileLocation, penaltyMin);
 						network.sigmaPenalty = 1;
 						network.sigmaTime = 1;
