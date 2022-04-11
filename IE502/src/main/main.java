@@ -18,7 +18,7 @@ public class main {
 		int[] nArray = {8, 10, 12};
 		int iTimes[] = {1, 2, 3, 4};
 		int[] drones = {5};
-		int[] penaltyMins = {10, 15, 20};
+		int[] penaltyMins = {25, 30, 35, 40};
 		runAll(nArray, iTimes, drones, penaltyMins);
 	}
 
