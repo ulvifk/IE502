@@ -25,6 +25,8 @@ public class Constraints {
 		depotP();
 		startingDepotTruckTimes();
 		startingDepotDroneOrderDoesNotMatter();
+//		droneUsageSymmetryBreaking();
+//		visitOrderSymmetryBreaking();
 		
 		customerServiceLink();
 		droneUsageLink();
@@ -83,6 +85,47 @@ public class Constraints {
 		constraint53();
 		constraint54();
 		constraint55();
+	}
+	
+	private void droneUsageSymmetryBreaking() throws GRBException {
+		for(int v = 1; v<this.network.getV().size(); v++) {
+			GRBVar v1 = this.variables.getDroneUsageVar().get(this.network.getV().get(v-1));
+			GRBVar v2 = this.variables.getDroneUsageVar().get(this.network.getV().get(v));
+			
+			this.model.addConstr(v1, GRB.GREATER_EQUAL, v2, null);
+		}
+	}
+	
+	private void visitOrderSymmetryBreaking() throws GRBException {
+		for(int v = 1; v<this.network.getV().size(); v++) {
+			Drone v1 = this.network.getV().get(v-1);
+			Drone v2 = this.network.getV().get(v);
+			for(Node i : this.network.getN0()) {
+				for(Node j : this.network.getCDrone().get(v1)) {
+					for(Node k : this.network.getNPlus()) {
+						if(!isSortie(v1, i, j, k)) continue;
+						
+						GRBLinExpr lhs = new GRBLinExpr();
+						for(Node l : this.network.getN0()) {
+							for(Node m : this.network.getCDrone().get(v1)) {
+								if(m.getIndex() >= j.getIndex()) continue;
+								if(l == m) continue;
+								for(Node n : this.network.getNPlus()) {
+									if(n == m) continue;
+									if(!isSortie(v2, l, m, n)) continue;
+									lhs.addTerm(1, this.variables.getY().get(v1).get(l).get(m).get(n));
+								}
+							}
+						}
+						
+						GRBLinExpr rhs = new GRBLinExpr();
+						rhs.addTerm(1, this.variables.getY().get(v2).get(i).get(j).get(k));
+						
+						this.model.addConstr(lhs, GRB.GREATER_EQUAL, rhs, null);
+					}
+				}
+			}
+		}
 	}
 	
 	private void findM() {

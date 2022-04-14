@@ -55,12 +55,12 @@ public class Network {
 		randomServiceTimeGeneration();
 		generateNodePenalites(penaltyMin);
 		
-		this.vehicle = new Vehicle(sumParcelWeight());
+		this.vehicle = new Vehicle(Math.ceil(sumParcelWeight()));
 		int x = 0;
 	}
 	
-	private int sumParcelWeight() {
-		int sum = 0;
+	private double sumParcelWeight() {
+		double sum = 0;
 		for(Node node : this.C) {
 			sum += node.getParcelVolume();
 		}

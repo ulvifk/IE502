@@ -21,18 +21,8 @@ public class TSPModel {
 		
 		model.optimize();
 		
-		if(model.get(GRB.IntAttr.Status) == GRB.INFEASIBLE) {
-			model.computeIIS();
-			
-			for(GRBConstr c : model.getConstrs()) {
-				if(c.get(GRB.IntAttr.IISConstr) == 1) {
-					System.out.println(c.get(GRB.StringAttr.ConstrName));
-				}
-			}
-		}
+		TSPWriteData write = new TSPWriteData(network, variables, folderLocation);
 		this.objectiveValue = model.get(GRB.DoubleAttr.ObjVal);
-		
-//		TSPWriteData write = new TSPWriteData(network, variables, folderLocation);
 		
 		model.dispose();
 		env.dispose();

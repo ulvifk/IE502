@@ -49,8 +49,9 @@ public class Model {
 			this.model.write(folderLocation + "\\model.lp");
 		}
 		
-		PrintWriter out = new PrintWriter(new File(folderLocation + "\\TSPObjective.txt"));
+		PrintWriter out = new PrintWriter(new File(folderLocation + "\\TSP\\TSPObjective.txt"));
 		out.println(lowerBound);
+		out.println(network.getVehicle().getCapacity());
 		out.close();
 		
 		this.model.dispose();

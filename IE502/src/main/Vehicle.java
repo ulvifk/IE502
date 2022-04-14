@@ -1,13 +1,13 @@
 package main;
 
 public class Vehicle {
-	private int Capacity;
+	private double Capacity;
 	
-	public Vehicle(int Capacity) {
+	public Vehicle(double Capacity) {
 		this.Capacity = Capacity;
 	}
 
-	public int getCapacity() {
+	public double getCapacity() {
 		return Capacity;
 	}
 	
