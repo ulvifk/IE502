@@ -1,0 +1,60 @@
+
+Gurobi 9.5.0 (win64) logging started Thu Apr 14 16:55:42 2022
+
+Set parameter LogFile to value "..\NewModel\Penalty_15Mins\Data_8_5_1\logFile.txt"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+Optimize a model with 7831 rows, 1534 columns and 89418 nonzeros
+Model fingerprint: 0x0531ebf4
+Variable types: 130 continuous, 1404 integer (1404 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+05]
+  Objective range  [1e+00, 9e+02]
+  Bounds range     [1e+00, 9e+00]
+  RHS range        [1e+00, 1e+05]
+Found heuristic solution: objective 6300.0000000
+Presolve removed 1812 rows and 262 columns
+Presolve time: 0.32s
+Presolved: 6019 rows, 1272 columns, 55427 nonzeros
+Extracted 1405 lazy constraints
+Variable types: 112 continuous, 1160 integer (1156 binary)
+
+Root relaxation: objective 0.000000e+00, 207 iterations, 0.01 seconds (0.01 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    6 6300.00000    0.00000   100%     -    0s
+     0     0    0.00000    0   34 6300.00000    0.00000   100%     -    0s
+     0     0    0.00000    0    6 6300.00000    0.00000   100%     -    0s
+     0     0    0.00000    0   10 6300.00000    0.00000   100%     -    0s
+     0     0    0.00000    0    8 6300.00000    0.00000   100%     -    0s
+     0     0    0.00000    0   43 6300.00000    0.00000   100%     -    0s
+     0     0    0.00000    0    6 6300.00000    0.00000   100%     -    0s
+     0     0    0.00000    0   36 6300.00000    0.00000   100%     -    1s
+     0     0    0.00000    0    7 6300.00000    0.00000   100%     -    1s
+     0     0    0.00000    0    7 6300.00000    0.00000   100%     -    1s
+     0     2    0.00000    0    7 6300.00000    0.00000   100%     -    1s
+  3431  1230  264.54939   29   15 6300.00000    0.00000   100%  25.1    5s
+  4664  1159 infeasible   39      6300.00000    0.00000   100%  25.2   10s
+
+Cutting planes:
+  Learned: 1
+  Lift-and-project: 1
+  Implied bound: 9
+  Clique: 1
+  MIR: 1
+  Flow cover: 4
+  RLT: 1
+  Relax-and-lift: 4
+  Lazy constraints: 22
+
+Explored 7429 nodes (174466 simplex iterations) in 12.66 seconds (15.07 work units)
+Thread count was 12 (of 12 available processors)
+
+Solution count 1: 6300 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.300000000000e+03, best bound 6.300000000000e+03, gap 0.0000%
+Warning: constraint name "Customer Service Link 1" has a space
+Warning: constraint name "Customer Service Link 1" has a space

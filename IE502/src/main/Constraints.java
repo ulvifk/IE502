@@ -25,8 +25,8 @@ public class Constraints {
 		depotP();
 		startingDepotTruckTimes();
 		startingDepotDroneOrderDoesNotMatter();
-//		droneUsageSymmetryBreaking();
-//		visitOrderSymmetryBreaking();
+		droneUsageSymmetryBreaking();
+		visitOrderSymmetryBreaking();
 		
 		customerServiceLink();
 		droneUsageLink();
@@ -145,6 +145,9 @@ public class Constraints {
 		if(i == k) return false;
 		if(j == k) return false;
 		if(!this.network.getCDrone().get(v).contains(j)) return false;
+		
+		double totalDistance = i.getDroneDistanceTo(j, v) + j.getDroneDistanceTo(k, v);
+		if(totalDistance > v.getEndurance()) return false;
 		
 		return true;
 	}

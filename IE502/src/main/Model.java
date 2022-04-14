@@ -20,6 +20,8 @@ public class Model {
 	
 	public double sigmaPenalty;
 	public double sigmaTime;
+	public double runTime;
+	public double objective;
 	
 	public Model(Network network, String folderLocation, double lowerBound) throws GRBException, IOException {
 		GRBEnv env = new GRBEnv();
@@ -53,6 +55,9 @@ public class Model {
 		out.println(lowerBound);
 		out.println(network.getVehicle().getCapacity());
 		out.close();
+		
+		this.runTime = this.model.get(GRB.DoubleAttr.Runtime);
+		this.objective = this.model.get(GRB.DoubleAttr.ObjVal);
 		
 		this.model.dispose();
 		env.dispose();

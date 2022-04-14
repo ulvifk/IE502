@@ -27,6 +27,7 @@ public class Objective {
 		}
 		
 		obj.multAdd(this.network.sigmaPenalty, penaltySum);
+		this.model.addConstr(obj, GRB.LESS_EQUAL, lowerBound, null);
 		
 		this.model.setObjective(obj, GRB.MINIMIZE);
 		

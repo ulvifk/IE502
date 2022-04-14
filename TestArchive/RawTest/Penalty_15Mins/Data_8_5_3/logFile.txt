@@ -1,0 +1,78 @@
+
+Gurobi 9.5.0 (win64) logging started Thu Apr 14 16:32:04 2022
+
+Set parameter LogFile to value "..\NewModel\Penalty_15Mins\Data_8_5_3\logFile.txt"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+Optimize a model with 8936 rows, 2299 columns and 150270 nonzeros
+Model fingerprint: 0xcf2d1d15
+Variable types: 130 continuous, 2169 integer (2169 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+05]
+  Objective range  [1e+00, 9e+02]
+  Bounds range     [1e+00, 9e+00]
+  RHS range        [1e+00, 1e+05]
+Found heuristic solution: objective 6300.0000000
+Presolve removed 1224 rows and 6 columns
+Presolve time: 0.29s
+Presolved: 7712 rows, 2293 columns, 100097 nonzeros
+Extracted 1799 lazy constraints
+Variable types: 112 continuous, 2181 integer (2181 binary)
+
+Root relaxation: objective 0.000000e+00, 398 iterations, 0.02 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   11 6300.00000    0.00000   100%     -    0s
+     0     0    0.00000    0   23 6300.00000    0.00000   100%     -    0s
+     0     0    0.00000    0    6 6300.00000    0.00000   100%     -    1s
+     0     0    0.00000    0    6 6300.00000    0.00000   100%     -    1s
+     0     0    0.00000    0    7 6300.00000    0.00000   100%     -    1s
+     0     0    0.00000    0    7 6300.00000    0.00000   100%     -    1s
+     0     0    0.00000    0    9 6300.00000    0.00000   100%     -    2s
+     0     0    0.00000    0    9 6300.00000    0.00000   100%     -    2s
+     0     0    0.00000    0    6 6300.00000    0.00000   100%     -    2s
+     0     0    0.00000    0   24 6300.00000    0.00000   100%     -    2s
+     0     0    0.00000    0    7 6300.00000    0.00000   100%     -    2s
+     0     0    0.00000    0    7 6300.00000    0.00000   100%     -    2s
+     0     0    0.00000    0    9 6300.00000    0.00000   100%     -    3s
+     0     0    0.00000    0   17 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0   16 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    6 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    6 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    8 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    8 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    7 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0   13 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    9 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    7 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    9 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    9 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0   10 6300.00000    0.00000   100%     -    4s
+     0     0    0.00000    0    8 6300.00000    0.00000   100%     -    4s
+     0     2    0.00000    0    8 6300.00000    0.00000   100%     -    4s
+     6     8    0.00000    3   26 6300.00000    0.00000   100%  25.0    5s
+  3140   937    0.00000   25   25 6300.00000    0.00000   100%  24.4   10s
+  3869   948 1792.77000   26    7 6300.00000    0.00000   100%  23.6   15s
+  4951   752  352.94530   30   26 6300.00000    0.00000   100%  26.7   20s
+H 5807   491                    6292.1700000    0.00000   100%  27.1   22s
+  7275   269    0.00000   45   49 6292.17000    0.00000   100%  27.8   25s
+
+Cutting planes:
+  Implied bound: 34
+  MIR: 6
+  Flow cover: 10
+  RLT: 1
+  Relax-and-lift: 7
+  Lazy constraints: 19
+
+Explored 12885 nodes (288843 simplex iterations) in 27.51 seconds (35.62 work units)
+Thread count was 12 (of 12 available processors)
+
+Solution count 2: 6292.17 6300 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.292170000000e+03, best bound 6.292170000000e+03, gap 0.0000%
+Warning: constraint name "Customer Service Link 1" has a space
+Warning: constraint name "Customer Service Link 1" has a space

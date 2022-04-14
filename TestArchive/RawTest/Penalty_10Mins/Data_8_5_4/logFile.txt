@@ -1,0 +1,81 @@
+
+Gurobi 9.5.0 (win64) logging started Thu Apr 14 16:30:23 2022
+
+Set parameter LogFile to value "..\NewModel\Penalty_10Mins\Data_8_5_4\logFile.txt"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+Optimize a model with 9366 rows, 2514 columns and 172970 nonzeros
+Model fingerprint: 0xf645e1af
+Variable types: 130 continuous, 2384 integer (2384 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+05]
+  Objective range  [1e+00, 6e+02]
+  Bounds range     [1e+00, 9e+00]
+  RHS range        [1e+00, 1e+05]
+Found heuristic solution: objective 4200.0000000
+Presolve added 0 rows and 24 columns
+Presolve removed 1499 rows and 0 columns
+Presolve time: 0.26s
+Presolved: 7867 rows, 2538 columns, 86684 nonzeros
+Extracted 1799 lazy constraints
+Variable types: 112 continuous, 2426 integer (2426 binary)
+
+Root relaxation: objective 0.000000e+00, 920 iterations, 0.05 seconds (0.11 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   14 4200.00000    0.00000   100%     -    0s
+H    0     0                    3358.7650000    0.00000   100%     -    0s
+     0     0    0.00000    0   35 3358.76500    0.00000   100%     -    0s
+     0     0    0.00000    0   23 3358.76500    0.00000   100%     -    1s
+     0     0    0.00000    0   23 3358.76500    0.00000   100%     -    1s
+     0     0    0.00000    0    8 3358.76500    0.00000   100%     -    1s
+     0     0    0.00000    0   17 3358.76500    0.00000   100%     -    1s
+     0     0    0.00000    0   10 3358.76500    0.00000   100%     -    1s
+     0     0    0.00000    0   51 3358.76500    0.00000   100%     -    1s
+     0     0    0.00000    0    6 3358.76500    0.00000   100%     -    2s
+     0     0    0.00000    0    7 3358.76500    0.00000   100%     -    2s
+     0     0    0.00000    0    7 3358.76500    0.00000   100%     -    2s
+     0     0    0.00000    0    8 3358.76500    0.00000   100%     -    2s
+     0     0    0.00000    0    8 3358.76500    0.00000   100%     -    2s
+     0     0    0.00000    0    8 3358.76500    0.00000   100%     -    3s
+     0     0    0.00000    0   56 3358.76500    0.00000   100%     -    3s
+     0     0    0.00000    0   57 3358.76500    0.00000   100%     -    3s
+     0     0    0.00000    0   10 3358.76500    0.00000   100%     -    4s
+     0     0    0.00000    0   21 3358.76500    0.00000   100%     -    4s
+     0     0    0.00000    0    9 3358.76500    0.00000   100%     -    4s
+     0     0    0.00000    0   45 3358.76500    0.00000   100%     -    4s
+     0     0    0.00000    0   12 3358.76500    0.00000   100%     -    4s
+     0     0    0.00000    0   24 3358.76500    0.00000   100%     -    4s
+     0     0    0.00000    0   13 3358.76500    0.00000   100%     -    4s
+     0     0    0.00000    0   13 3358.76500    0.00000   100%     -    4s
+     0     2    0.00000    0   13 3358.76500    0.00000   100%     -    5s
+H   34    25                    3358.7649997    0.00000   100%  53.4    5s
+H  147    71                    3358.7649993    0.00000   100%  29.4    6s
+  1773   542    0.00000   22   29 3358.76500    0.00000   100%  39.0   10s
+  4942   781 infeasible   29      3358.76500    0.00000   100%  39.2   15s
+  9042   429 infeasible  100      3358.76500 1212.88500  63.9%  38.3   20s
+
+Cutting planes:
+  Learned: 26
+  Gomory: 2
+  Cover: 300
+  Implied bound: 710
+  Clique: 22
+  MIR: 120
+  GUB cover: 2
+  Inf proof: 22
+  Zero half: 5
+  RLT: 47
+  Relax-and-lift: 28
+
+Explored 10744 nodes (421410 simplex iterations) in 21.08 seconds (32.18 work units)
+Thread count was 12 (of 12 available processors)
+
+Solution count 4: 3358.76 3358.76 3358.76 4200 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.358764999328e+03, best bound 3.358764999328e+03, gap 0.0000%
+Warning: constraint name "Customer Service Link 1" has a space
+Warning: constraint name "Customer Service Link 1" has a space

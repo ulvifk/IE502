@@ -1,0 +1,83 @@
+
+Gurobi 9.5.0 (win64) logging started Thu Apr 14 16:35:24 2022
+
+Set parameter LogFile to value "..\NewModel\Penalty_20Mins\Data_8_5_5\logFile.txt"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+Optimize a model with 8936 rows, 2299 columns and 150270 nonzeros
+Model fingerprint: 0xe60bad0a
+Variable types: 130 continuous, 2169 integer (2169 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+05]
+  Objective range  [1e+00, 1e+03]
+  Bounds range     [1e+00, 9e+00]
+  RHS range        [1e+00, 1e+05]
+Found heuristic solution: objective 8400.0000000
+Presolve removed 1224 rows and 6 columns
+Presolve time: 0.27s
+Presolved: 7712 rows, 2293 columns, 100075 nonzeros
+Extracted 1799 lazy constraints
+Variable types: 112 continuous, 2181 integer (2181 binary)
+
+Root relaxation: objective 0.000000e+00, 459 iterations, 0.02 seconds (0.04 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   10 8400.00000    0.00000   100%     -    0s
+H    0     0                    8251.3800000    0.00000   100%     -    0s
+H    0     0                    7141.3800000    0.00000   100%     -    0s
+     0     0    0.00000    0   22 7141.38000    0.00000   100%     -    0s
+     0     0    0.00000    0    9 7141.38000    0.00000   100%     -    1s
+     0     0    0.00000    0   18 7141.38000    0.00000   100%     -    1s
+H    0     0                    7141.3350000    0.00000   100%     -    1s
+     0     0    0.00000    0   10 7141.33500    0.00000   100%     -    1s
+     0     0    0.00000    0   13 7141.33500    0.00000   100%     -    1s
+     0     0    0.00000    0   12 7141.33500    0.00000   100%     -    1s
+     0     0    0.00000    0   10 7141.33500    0.00000   100%     -    1s
+     0     0    0.00000    0    6 7141.33500    0.00000   100%     -    1s
+     0     0    0.00000    0   14 7141.33500    0.00000   100%     -    2s
+     0     0    0.00000    0    7 7141.33500    0.00000   100%     -    2s
+     0     0    0.00000    0    7 7141.33500    0.00000   100%     -    2s
+     0     0    0.00000    0    6 7141.33500    0.00000   100%     -    2s
+     0     0    0.00000    0    6 7141.33500    0.00000   100%     -    2s
+     0     0    0.00000    0   10 7141.33500    0.00000   100%     -    3s
+     0     0    0.00000    0   33 7141.33500    0.00000   100%     -    3s
+     0     0    0.00000    0   33 7141.33500    0.00000   100%     -    3s
+     0     0    0.00000    0    7 7141.33500    0.00000   100%     -    3s
+     0     0    0.00000    0   12 7141.33500    0.00000   100%     -    3s
+     0     0    0.00000    0    8 7141.33500    0.00000   100%     -    3s
+     0     0    0.00000    0   20 7141.33500    0.00000   100%     -    3s
+     0     0    0.00000    0    7 7141.33500    0.00000   100%     -    3s
+     0     0    0.00000    0   15 7141.33500    0.00000   100%     -    3s
+     0     0    0.00000    0    9 7141.33500    0.00000   100%     -    4s
+     0     0    0.00000    0    9 7141.33500    0.00000   100%     -    4s
+     0     2    0.00000    0    9 7141.33500    0.00000   100%     -    4s
+  1063   296 infeasible   11      7141.33500    0.00000   100%  12.8    5s
+  5127   945  431.44302   14    8 7141.33500    0.00000   100%  15.0   10s
+  7964    36 infeasible   33      7141.33500 1141.33500  84.0%  18.8   15s
+
+Cutting planes:
+  Learned: 1
+  Gomory: 1
+  Lift-and-project: 3
+  Cover: 1
+  Implied bound: 64
+  Projected implied bound: 3
+  Clique: 1
+  MIR: 7
+  Flow cover: 20
+  Mod-K: 1
+  RLT: 1
+  Relax-and-lift: 19
+  Lazy constraints: 19
+
+Explored 8277 nodes (164882 simplex iterations) in 15.17 seconds (17.54 work units)
+Thread count was 12 (of 12 available processors)
+
+Solution count 4: 7141.33 7141.38 8251.38 8400 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 7.141335000000e+03, best bound 7.141335000000e+03, gap 0.0000%
+Warning: constraint name "Customer Service Link 1" has a space
+Warning: constraint name "Customer Service Link 1" has a space
