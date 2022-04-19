@@ -20,7 +20,7 @@ public class main {
 //		Network network = new Network(0);
 //		Model model = new Model(network);
 //		int x = 0;
-		int[] nArray = {8};
+		int[] nArray = {12, 14};
 		int iTimes[] = {1, 2, 3, 4, 5};
 		int[] drones = {5};
 		int[] penaltyMins = {10, 15, 20, 25, 30, 35, 40};

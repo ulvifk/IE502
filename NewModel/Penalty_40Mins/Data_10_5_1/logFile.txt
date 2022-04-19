@@ -1,0 +1,50 @@
+
+Gurobi 9.5.0 (win64) logging started Fri Apr 15 03:10:57 2022
+
+Set parameter LogFile to value "..\NewModel\Penalty_40Mins\Data_10_5_1\logFile.txt"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+Optimize a model with 12725 rows, 2315 columns and 226118 nonzeros
+Model fingerprint: 0x35d46ef0
+Variable types: 158 continuous, 2157 integer (2157 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+05]
+  Objective range  [1e+00, 2e+03]
+  Bounds range     [1e+00, 1e+01]
+  RHS range        [1e+00, 1e+05]
+Presolve removed 2885 rows and 298 columns
+Presolve time: 0.55s
+Presolved: 9840 rows, 2017 columns, 132860 nonzeros
+Extracted 3163 lazy constraints
+Variable types: 140 continuous, 1877 integer (1877 binary)
+
+Root relaxation: objective 0.000000e+00, 387 iterations, 0.02 seconds (0.04 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    7          -    0.00000      -     -    0s
+     0     0    0.00000    0   22          -    0.00000      -     -    0s
+     0     0    0.00000    0   18          -    0.00000      -     -    1s
+     0     0    0.00000    0   10          -    0.00000      -     -    1s
+     0     0    0.00000    0   10          -    0.00000      -     -    1s
+     0     0    0.00000    0    7          -    0.00000      -     -    1s
+     0     0    0.00000    0    7          -    0.00000      -     -    1s
+     0     0    0.00000    0    9          -    0.00000      -     -    1s
+     0     0    0.00000    0   26          -    0.00000      -     -    1s
+     0     0    0.00000    0    7          -    0.00000      -     -    1s
+     0     0    0.00000    0    7          -    0.00000      -     -    1s
+     0     2    0.00000    0    7          -    0.00000      -     -    2s
+  2834  1424 3642.69666   17    7          -    0.00000      -  17.3    8s
+  2841  1429 1307.59012   42    7          -    0.00000      -  17.2   10s
+  4280  1802   35.07080   28   29          -    0.00000      -  18.4   15s
+ 11455  3713    0.00000   35   19          -    0.00000      -  15.7   20s
+ 18482  6460 4771.71000   46    7          -    0.00000      -  15.7   25s
+ 28711  9497    0.00000   36   22          -    0.00000      -  15.2   30s
+ 34494 11320    0.00000   35   28          -    0.00000      -  15.8   35s
+ 42453 13711 1687.61265   54   36          -    0.00000      -  16.1   40s
+ 50166 15945 1220.10540   37   19          -    0.00000      -  16.0   45s
+ 58960 18052 1483.74056   38   22          -    0.00000      -  15.8   50s
+ 67900 20167 infeasible   35               -    0.00000      -  15.7   55s
+ 76473 22853 infeasible   38               -    0.00000      -  15.5   60s
+*81457 22450              40    11454.875000    0.00000   100%  15.5   63s

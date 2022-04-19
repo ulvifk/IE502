@@ -1,0 +1,88 @@
+
+Gurobi 9.5.0 (win64) logging started Fri Apr 15 02:41:33 2022
+
+Set parameter LogFile to value "..\NewModel\Penalty_30Mins\Data_10_5_5\logFile.txt"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+Optimize a model with 10457 rows, 1505 columns and 51569 nonzeros
+Model fingerprint: 0x79e032cf
+Variable types: 158 continuous, 1347 integer (1347 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+05]
+  Objective range  [1e+00, 2e+03]
+  Bounds range     [1e+00, 1e+01]
+  RHS range        [1e+00, 1e+05]
+Presolve removed 5550 rows and 576 columns
+Presolve time: 0.25s
+Presolved: 4907 rows, 929 columns, 31380 nonzeros
+Extracted 1189 lazy constraints
+Variable types: 140 continuous, 789 integer (788 binary)
+
+Root relaxation: objective 0.000000e+00, 165 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   10          -    0.00000      -     -    0s
+     0     0    0.00000    0   16          -    0.00000      -     -    0s
+     0     0    0.00000    0   10          -    0.00000      -     -    0s
+     0     0    0.00000    0   12          -    0.00000      -     -    0s
+     0     0    0.00000    0    9          -    0.00000      -     -    0s
+     0     0    0.00000    0    9          -    0.00000      -     -    0s
+     0     0    0.00000    0    9          -    0.00000      -     -    0s
+     0     0    0.00000    0   19          -    0.00000      -     -    0s
+     0     0    0.00000    0    7          -    0.00000      -     -    0s
+     0     0    0.00000    0    7          -    0.00000      -     -    0s
+     0     0    0.00000    0    7          -    0.00000      -     -    0s
+     0     0    0.00000    0    7          -    0.00000      -     -    0s
+     0     0    0.00000    0    7          -    0.00000      -     -    0s
+     0     2    0.00000    0    7          -    0.00000      -     -    0s
+ 14953  5586   49.21543   31   17          -    0.00000      -  11.6    5s
+ 47645 14959    0.00000   36   19          -    0.00000      -  10.6   10s
+ 82576 24626 infeasible   33               -    0.00000      -  10.4   15s
+ 105739 33127 10039.0700   31   15          -    0.00000      -  10.6   20s
+ 134272 41780 infeasible   25               -    0.00000      -  10.6   25s
+*139383 39948              40    13321.660000    0.00000   100%  10.7   26s
+H141023 40172                    13006.340000    0.00000   100%  10.7   27s
+H142126 40062                    12595.100000    0.00000   100%  10.7   27s
+ 144168 40099   26.75962   37   26 12595.1000    0.00000   100%  10.8   30s
+ 146766 40200 infeasible   41      12595.1000    0.00000   100%  11.0   35s
+ 152277 40359    0.00000   31   10 12595.1000    0.00000   100%  11.4   40s
+ 158289 40808    0.00000   39   10 12595.1000    0.00000   100%  11.8   45s
+ 170204 43759 5650.38000   46   11 12595.1000    0.00000   100%  12.1   50s
+ 188059 46705 2730.51077   42   19 12595.1000    0.00000   100%  12.0   55s
+ 205566 48835    0.00000   31   15 12595.1000    0.00000   100%  12.0   60s
+ 220528 50866   41.38849   58   28 12595.1000    0.00000   100%  12.0   65s
+ 233071 52691    0.00000   32   18 12595.1000    0.00000   100%  12.0   70s
+ 246095 54684    0.00000   26   15 12595.1000    0.00000   100%  12.0   75s
+ 257502 56792 7680.38000   25   12 12595.1000    0.00000   100%  12.1   80s
+ 273246 56064 1603.79000   48   16 12595.1000    0.78060   100%  12.1   85s
+ 287496 55887  245.81745   50   20 12595.1000  204.91446  98.4%  12.1   90s
+ 306595 52468 infeasible   31      12595.1000  364.31000  97.1%  12.0   95s
+ 324416 46197 infeasible   42      12595.1000  686.34000  94.6%  12.0  100s
+ 341653 41144 infeasible   32      12595.1000  815.92595  93.5%  12.0  105s
+ 361272 31722 1777.92051   59   29 12595.1000 1573.79000  87.5%  12.0  110s
+ 376034 26680 8668.09000   47   16 12595.1000 1800.00000  85.7%  12.1  115s
+ 400433 17420 3382.98883   49   25 12595.1000 3126.23932  75.2%  12.1  120s
+
+Cutting planes:
+  Learned: 1
+  Gomory: 1
+  Implied bound: 9
+  Projected implied bound: 1
+  MIR: 2
+  Flow cover: 14
+  Zero half: 1
+  RLT: 1
+  Relax-and-lift: 2
+  Lazy constraints: 30
+
+Explored 421851 nodes (4980468 simplex iterations) in 123.62 seconds (97.15 work units)
+Thread count was 12 (of 12 available processors)
+
+Solution count 3: 12595.1 13006.3 13321.7 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.259510000000e+04, best bound 1.259510000000e+04, gap 0.0000%
+Warning: constraint name "Customer Service Link 1" has a space
+Warning: constraint name "Customer Service Link 1" has a space

@@ -1,0 +1,2 @@
+DroneIndex,iIndex,jIndex,kIndex,iX,iY,jX,jY,kX,kY,Launch[i],Arrival[j],Launch[j],Retrieval[k]
+0,7,3,6,29.218978,41.011852,29.163916,41.142511,28.989931,41.046271,1161.070000,1837.860000,1897.860000,2688.160000

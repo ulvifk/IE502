@@ -1,0 +1,79 @@
+
+Gurobi 9.5.0 (win64) logging started Fri Apr 15 01:58:14 2022
+
+Set parameter LogFile to value "..\NewModel\Penalty_20Mins\Data_10_5_5\logFile.txt"
+Gurobi Optimizer version 9.5.0 build v9.5.0rc5 (win64)
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+Optimize a model with 10457 rows, 1505 columns and 51569 nonzeros
+Model fingerprint: 0x5c1e31cb
+Variable types: 158 continuous, 1347 integer (1347 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+05]
+  Objective range  [1e+00, 1e+03]
+  Bounds range     [1e+00, 1e+01]
+  RHS range        [1e+00, 1e+05]
+Found heuristic solution: objective 10800.000000
+Presolve removed 5550 rows and 576 columns
+Presolve time: 0.25s
+Presolved: 4907 rows, 929 columns, 31380 nonzeros
+Extracted 1189 lazy constraints
+Variable types: 140 continuous, 789 integer (788 binary)
+
+Root relaxation: objective 0.000000e+00, 165 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   10 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0   21 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0    9 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0   21 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0   10 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0   10 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0    7 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0    7 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0    9 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0   11 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0    9 10800.0000    0.00000   100%     -    0s
+     0     0    0.00000    0   31 10800.0000    0.00000   100%     -    0s
+H    0     0                    10311.120000    0.00000   100%     -    0s
+     0     0    0.00000    0   10 10311.1200    0.00000   100%     -    0s
+     0     0    0.00000    0   10 10311.1200    0.00000   100%     -    0s
+     0     2    0.00000    0    9 10311.1200    0.00000   100%     -    1s
+H  111   115                    10187.410000    0.00000   100%  20.5    1s
+  5068  1646  817.86103   32   15 10187.4100    0.00000   100%  15.5    5s
+ 20273  4399    0.00000   21   14 10187.4100    0.00000   100%  13.3   10s
+ 41798  6957 infeasible   33      10187.4100    0.00000   100%  12.2   15s
+ 53369  7681 infeasible   43      10187.4100    0.00000   100%  12.4   20s
+ 75201 10765 infeasible   44      10187.4100    0.00000   100%  13.0   25s
+ 88370 13326    0.00000   28   12 10187.4100    0.00000   100%  13.4   30s
+ 108222 15746 infeasible   38      10187.4100    0.00000   100%  13.5   35s
+ 122176 17220    0.00000   29   18 10187.4100    0.00000   100%  13.6   41s
+ 136861 18821 infeasible   40      10187.4100    0.00000   100%  13.8   45s
+ 153657 21438 infeasible   42      10187.4100    0.00000   100%  13.5   50s
+ 162147 22213 1715.73000   49   17 10187.4100    0.00000   100%  14.0   56s
+ 173364 21390  120.75035   43   11 10187.4100   37.09312   100%  14.1   61s
+ 195202 18047 infeasible   29      10187.4100  370.35622  96.4%  13.5   65s
+ 211489 11696 infeasible   41      10187.4100 1547.89000  84.8%  13.4   70s
+
+Cutting planes:
+  Learned: 1
+  Gomory: 1
+  Implied bound: 12
+  Projected implied bound: 2
+  MIR: 3
+  Flow cover: 2
+  Inf proof: 2
+  RLT: 1
+  Relax-and-lift: 2
+  Lazy constraints: 18
+
+Explored 234749 nodes (3102109 simplex iterations) in 74.35 seconds (63.97 work units)
+Thread count was 12 (of 12 available processors)
+
+Solution count 3: 10187.4 10311.1 10800 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.018741000000e+04, best bound 1.018741000000e+04, gap 0.0000%
+Warning: constraint name "Customer Service Link 1" has a space
+Warning: constraint name "Customer Service Link 1" has a space
